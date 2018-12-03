@@ -65,7 +65,7 @@ namespace ConsoleApp1
             {
                 for (int j = 0; j < matrix.Variables; j++)
                 {
-                    if (min >= tArray[i][j])
+                    if (min > tArray[i][j])
                     {
                         double minVal = Math.Min(tArray[matrix.CMatrix.Length - 1][j],
                             tArray[i][matrix.CMatrix[i].Length - 1]);
