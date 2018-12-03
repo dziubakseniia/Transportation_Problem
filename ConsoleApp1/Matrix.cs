@@ -48,7 +48,18 @@ namespace ConsoleApp1
             double min = matrix.CMatrix[0][0];
             double[][] tArray = new double[matrix.Restrictions][];
 
-            tArray = CMatrix;
+            for (int i = 0; i < matrix.Restrictions; i++)
+            {
+                tArray[i] = new double[matrix.Variables];
+            }
+
+            for (int i = 0; i < matrix.Restrictions; i++)
+            {
+                for (int j = 0; j < matrix.Variables; j++)
+                {
+                    tArray[i][j] = matrix.CMatrix[i][j];
+                }
+            }
 
             for (int i = 0; i < matrix.Restrictions; i++)
             {
@@ -86,11 +97,6 @@ namespace ConsoleApp1
                     }
                 }
             }
-
-            Console.WriteLine("matrix.CMatrix:");
-            Print(matrix.CMatrix);
-            Console.WriteLine();
-            Console.WriteLine();
 
             return matrix;
         }
