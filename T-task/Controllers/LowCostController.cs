@@ -2,9 +2,9 @@
 using System.Web.Mvc;
 using T_task.Models;
 
-namespace T_task.Controllers.Start
+namespace T_task.Controllers
 {
-    public class StartController : Controller
+    public class LowCostController : Controller
     {
         private Matrix _matrix = new Matrix();
 
@@ -17,10 +17,10 @@ namespace T_task.Controllers.Start
         public ActionResult VarsRestr(Matrix matrix)
         {
             _matrix = matrix;
-            return RedirectToAction("NorthWest", _matrix);
+            return RedirectToAction("LowCost", _matrix);
         }
 
-        public ActionResult NorthWest(string variables, string restrictions)
+        public ActionResult LowCost(string variables, string restrictions)
         {
             _matrix.Variables = Convert.ToInt32(variables);
             _matrix.Restrictions = Convert.ToInt32(restrictions);
@@ -44,10 +44,10 @@ namespace T_task.Controllers.Start
         }
 
         [HttpPost]
-        public ActionResult NorthWest(Matrix matrix)
+        public ActionResult LowCost(Matrix matrix)
         {
-            ViewBag.Matrix = matrix.NorthWest(matrix);
-            return View("NorthWestResult");
+            ViewBag.Matrix = matrix.LowCost(matrix);
+            return View("LowCostResult");
         }
     }
 }

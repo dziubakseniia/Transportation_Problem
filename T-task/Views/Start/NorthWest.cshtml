@@ -1,0 +1,54 @@
+﻿@using System.CodeDom
+@model T_task.Models.Matrix
+
+@{
+    ViewBag.Title = "title";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm())
+{
+    <table>
+        @for (int row = 0; row < Model.CMatrix.Length; row++)
+        {
+            <tr class="d-inline-block">
+                @for (int col = 0; col < Model.CMatrix[row].Length; col++)
+                {
+                    if (row == Model.CMatrix.Length - 1)
+                    {
+                        <td>
+                            @Html.TextBoxFor(x => Model.CMatrix[row][col])
+                            @if (col == Model.CMatrix[row].Length - 1)
+                            {
+                                @Html.Label("")
+                            }
+                            else
+                            {
+                                @Html.Label("-----")
+                            }
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            @Html.TextBoxFor(x => Model.CMatrix[row][col])
+                            @if (col == Model.CMatrix[row].Length - 2)
+                            {
+                                @Html.Label("x" + (col + 1) + " = ")
+                            }
+                            else if (col == Model.CMatrix[row].Length - 1)
+                            {
+                                @Html.Label("")
+                            }
+                            else
+                            {
+                                @Html.Label("x" + (col + 1) + " + ")
+                            }
+                        </td>
+                    }
+                }
+            </tr>
+        }
+    </table>
+    <input type="submit" value="Розрахувати" />
+}

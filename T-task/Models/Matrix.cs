@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace T_task.Models
 {
@@ -12,12 +13,7 @@ namespace T_task.Models
 
         public double NorthWest(Matrix matrix)
         {
-            TempMatrix = new double[matrix.Restrictions][];
-
-            for (int i = 0; i < matrix.Restrictions; i++)
-            {
-                matrix.TempMatrix[i] = new double[matrix.Variables];
-            }
+            CreateTempMatrix(matrix);
 
             for (int i = 0; i < matrix.Restrictions; i++)
             {
@@ -34,6 +30,148 @@ namespace T_task.Models
             }
 
             return Sum(matrix.CMatrix, matrix.TempMatrix);
+        }
+
+        public double LowCost(Matrix matrix)
+        {
+            CreateTempMatrix(matrix);
+
+            double min = matrix.CMatrix[0][0];
+
+            double[][] tArray = new double[matrix.Restrictions][];
+
+            for (int i = 0; i < matrix.Restrictions; i++)
+            {
+                tArray[i] = new double[matrix.Variables];
+            }
+
+            CopyCMatrixToTArray(tArray, matrix);
+
+            while (!IsOptimal(tArray))
+            {
+                int minRowIndex = 0;
+                int minColIndex = 0;
+
+                var minRowColIndexes = FindFirstNot0Value(tArray, min, minRowIndex, minColIndex);
+
+                min = minRowColIndexes.Item1;
+                minRowIndex = minRowColIndexes.Item2;
+                minColIndex = minRowColIndexes.Item3;
+
+                minRowColIndexes = FindMinNot0Value(tArray, min, minRowIndex, minColIndex);
+
+                min = minRowColIndexes.Item1;
+                minRowIndex = minRowColIndexes.Item2;
+                minColIndex = minRowColIndexes.Item3;
+
+                double minVal = Math.Min(tArray[tArray.Length - 1][minColIndex],
+                    tArray[minRowIndex][tArray[minRowIndex].Length - 1]);
+
+                matrix.TempMatrix[minRowIndex][minColIndex] = minVal;
+
+                tArray[tArray.Length - 1][minColIndex] -= minVal;
+                tArray[minRowIndex][tArray[minRowIndex].Length - 1] -= minVal;
+
+                MakeCol0(tArray, matrix, minColIndex);
+                MakeRow0(tArray, matrix, minRowIndex);
+            }
+
+            return Sum(matrix.CMatrix, matrix.TempMatrix);
+        }
+
+        public void CreateTempMatrix(Matrix matrix)
+        {
+            TempMatrix = new double[matrix.Restrictions][];
+
+            for (int i = 0; i < matrix.Restrictions; i++)
+            {
+                matrix.TempMatrix[i] = new double[matrix.Variables];
+            }
+        }
+
+        public void CopyCMatrixToTArray(double[][] tArray, Matrix matrix)
+        {
+            for (int i = 0; i < matrix.Restrictions; i++)
+            {
+                for (int j = 0; j < matrix.Variables; j++)
+                {
+                    tArray[i][j] = matrix.CMatrix[i][j];
+                }
+            }
+        }
+
+        public Tuple<double, int, int> FindFirstNot0Value(double[][] tArray, double min, int minRowIndex, int minColIndex)
+        {
+            for (int i = 0; i < tArray.Length; i++)
+            {
+                for (int j = 0; j < tArray[i].Length; j++)
+                {
+                    if (tArray[i][j] != 0)
+                    {
+                        min = tArray[i][j];
+                        minRowIndex = i;
+                        minColIndex = j;
+                        break;
+                    }
+                }
+            }
+
+            return Tuple.Create(min, minRowIndex, minColIndex);
+        }
+
+        public Tuple<double, int, int> FindMinNot0Value(double[][] tArray, double min, int minRowIndex, int minColIndex)
+        {
+            for (int i = 0; i < tArray.Length; i++)
+            {
+                for (int j = 0; j < tArray[i].Length; j++)
+                {
+                    if (tArray[i][j] < min && tArray[i][j] != 0)
+                    {
+                        min = tArray[i][j];
+                        minRowIndex = i;
+                        minColIndex = j;
+                    }
+                }
+            }
+
+            return Tuple.Create(min, minRowIndex, minColIndex);
+        }
+
+        public void MakeCol0(double[][] tArray, Matrix matrix, int minColIndex)
+        {
+            if (tArray[tArray.Length - 1][minColIndex] == 0)
+            {
+                int k = 0;
+                while (k < matrix.Restrictions)
+                {
+                    tArray[k][minColIndex] = 0;
+                    k++;
+                }
+            }
+        }
+
+        public void MakeRow0(double[][] tArray, Matrix matrix, int minRowIndex)
+        {
+            if (tArray[minRowIndex][tArray[minRowIndex].Length - 1] == 0)
+            {
+                int k = 0;
+                while (k < matrix.Variables)
+                {
+                    tArray[minRowIndex][k] = 0;
+                    k++;
+                }
+            }
+        }
+
+        public bool IsOptimal(double[][] tArray)
+        {
+            double[] expectedArray = new double[tArray[0].Length];
+            if (tArray[tArray.Length - 1].SequenceEqual(expectedArray))
+            {
+                return true;
+            }
+
+            return false;
         }
 
         public double Sum(double[][] matrix, double[][] tempMatrix)

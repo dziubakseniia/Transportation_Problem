@@ -1,0 +1,17 @@
+﻿@model T_task.Models.Matrix
+
+@{
+    ViewBag.Title = "title";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+@using (Html.BeginForm())
+{
+    @Html.Label("Кількість міст:")
+    @Html.TextBoxFor(x => Model.Variables)
+    @Html.Label("Кількість одиниць товару:")
+    @Html.TextBoxFor(x => Model.Restrictions)
+
+    <input type="submit" value="Скласти задачу найменших вартостей" class="btn" />
+}

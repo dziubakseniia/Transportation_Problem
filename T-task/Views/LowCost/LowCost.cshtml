@@ -1,4 +1,5 @@
-﻿@model T_task.Models.Matrix
+﻿@using System.CodeDom
+@model T_task.Models.Matrix
 
 @{
     ViewBag.Title = "title";
@@ -49,6 +50,5 @@
             </tr>
         }
     </table>
-    <input type="submit" value="Submit" />
-    //@Html.ActionLink("Submit", "MatrixCalculation", null, new {matrix = Model, @class = "btn" })
+    <input type="submit" value="Розрахувати" />
 }
