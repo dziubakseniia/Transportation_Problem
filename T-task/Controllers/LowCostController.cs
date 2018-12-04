@@ -46,6 +46,8 @@ namespace T_task.Controllers
         [HttpPost]
         public ActionResult LowCost(Matrix matrix)
         {
+            matrix.Variables += 1;
+            matrix.Restrictions += 1;
             ViewBag.Matrix = matrix.LowCost(matrix);
             return View("LowCostResult");
         }
