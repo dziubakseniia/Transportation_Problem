@@ -39,7 +39,8 @@ namespace ConsoleApp1
             matrix.CMatrix[3][3] = 200;
             matrix.CMatrix[3][4] = 0;
 
-            matrix.LeastCost(matrix);
+            matrix.NorthWest(matrix);
+            matrix.UVMethod(matrix);
 
             matrix.Print(matrix.CMatrix);
             Console.WriteLine();

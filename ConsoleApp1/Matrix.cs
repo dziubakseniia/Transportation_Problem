@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace ConsoleApp1
@@ -173,6 +174,155 @@ namespace ConsoleApp1
 
             return false;
         }
+
+        public Matrix UVMethod(Matrix matrix)
+        {
+            double[][] allocatedMatrix = CreateAllocatedMatrix(matrix);
+
+            if (CheckAllocatedElements(allocatedMatrix))
+            {
+                double?[] uValues = new double?[matrix.Restrictions - 1];
+                double?[] vValues = new double?[matrix.Variables - 1];
+
+                CreateUVArrays(uValues, vValues, matrix);
+
+                Console.WriteLine("V_Values:");
+                PrintOneDArray(vValues);
+
+                Console.WriteLine("U_Values");
+                PrintOneDArray(uValues);
+
+                double[][] unallocatedMatrix = CreateUnallocatedMatrix(matrix, allocatedMatrix, uValues, vValues);
+
+                List<Tuple<int, int>> coordinates = new List<Tuple<int, int>>();
+
+                for (int i = 0; i < unallocatedMatrix.Length; i++)
+                {
+                    for (int j = 0; j < unallocatedMatrix[i].Length; j++)
+                    {
+                        if (unallocatedMatrix[i][j] > 0)
+                        {
+                            if ((i - 1) >= 0 && (i - 1) < unallocatedMatrix.Length && unallocatedMatrix[i - 1][j] == 0)
+                            {
+                                coordinates.Add(Tuple.Create(i - 1, j));
+                            }
+                            else if ((i + 1) >= 0 && (i + 1) < unallocatedMatrix.Length && unallocatedMatrix[i + 1][j] == 0)
+                            {
+                                coordinates.Add(Tuple.Create(i + 1, j));
+                            }
+                        }
+                    }
+                }
+
+                foreach (var coordinate in coordinates)
+                {
+                    Console.WriteLine(coordinate.Item1 + " " + coordinate.Item2);
+                }
+
+                matrix.CMatrix = unallocatedMatrix;
+            }
+
+            return matrix;
+        }
+
+        public double[][] CreateAllocatedMatrix(Matrix matrix)
+        {
+            double[][] allocatedMatrix = new double[matrix.Restrictions][];
+
+            for (int i = 0; i < matrix.Restrictions; i++)
+            {
+                allocatedMatrix[i] = new double[matrix.Variables];
+            }
+
+            for (int i = 0; i < matrix.Restrictions; i++)
+            {
+                for (int j = 0; j < matrix.Variables; j++)
+                {
+                    allocatedMatrix[i][j] = matrix.TempMatrix[i][j];
+                }
+            }
+
+            return allocatedMatrix;
+        }
+
+        public double[][] CreateUnallocatedMatrix(Matrix matrix, double[][] allocatedMatrix, double?[] uValues, double?[] vValues)
+        {
+            double[][] unallocatedMatrix = new double[matrix.Restrictions - 1][];
+
+            for (int i = 0; i < matrix.Restrictions - 1; i++)
+            {
+                unallocatedMatrix[i] = new double[matrix.Variables - 1];
+            }
+
+            for (int i = 0; i < matrix.Restrictions - 1; i++)
+            {
+                for (int j = 0; j < matrix.Variables - 1; j++)
+                {
+                    if (allocatedMatrix[i][j] == 0)
+                    {
+                        unallocatedMatrix[i][j] = (double)uValues[i] + (double)vValues[j] - matrix.CMatrix[i][j];
+                    }
+                }
+            }
+
+            return unallocatedMatrix;
+        }
+
+        public void CreateUVArrays(double?[] uValues, double?[] vValues, Matrix matrix)
+        {
+            for (int i = 0; i < uValues.Length; i++)
+            {
+                for (int j = 0; j < vValues.Length; j++)
+                {
+                    if (matrix.TempMatrix[i][j] != 0)
+                    {
+                        uValues[0] = 0;
+                        break;
+                    }
+                }
+            }
+
+            for (int i = 0; i < uValues.Length; i++)
+            {
+                for (int j = 0; j < vValues.Length; j++)
+                {
+                    if (matrix.TempMatrix[i][j] != 0)
+                    {
+                        if (uValues[i] != null && vValues[j] == null)
+                        {
+                            vValues[j] = matrix.CMatrix[i][j] - uValues[i];
+                        }
+                        else if (uValues[i] == null && vValues[j] != null)
+                        {
+                            uValues[i] = matrix.CMatrix[i][j] - vValues[j];
+                        }
+                    }
+                }
+            }
+        }
+
+        public bool CheckAllocatedElements(double[][] allocatedMatrix)
+        {
+            int numbers = 0;
+            for (int i = 0; i < allocatedMatrix.Length; i++)
+            {
+                for (int j = 0; j < allocatedMatrix[i].Length; j++)
+                {
+                    if (allocatedMatrix[i][j] != 0)
+                    {
+                        numbers++;
+                    }
+                }
+            }
+
+            if (numbers == ((allocatedMatrix.Length - 1) + (allocatedMatrix[0].Length - 1) - 1))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         public double Sum(double[][] matrix, double[][] tempMatrix)
         {
             double sum = 0;
@@ -198,6 +348,17 @@ namespace ConsoleApp1
                 }
                 Console.WriteLine();
             }
+        }
+
+        public void PrintOneDArray(double?[] array)
+        {
+            for (int i = 0; i < array.Length; i++)
+            {
+                Console.Write($"{array[i],5}");
+            }
+
+            Console.WriteLine();
+            Console.WriteLine();
         }
     }
 }
