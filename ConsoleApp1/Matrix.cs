@@ -1,6 +1,8 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 
 namespace ConsoleApp1
 {
@@ -174,7 +176,7 @@ namespace ConsoleApp1
 
             return false;
         }
-
+        /*
         public Matrix UVMethod(Matrix matrix)
         {
             double[][] allocatedMatrix = CreateAllocatedMatrix(matrix);
@@ -184,45 +186,300 @@ namespace ConsoleApp1
                 double?[] uValues = new double?[matrix.Restrictions - 1];
                 double?[] vValues = new double?[matrix.Variables - 1];
 
-                CreateUVArrays(uValues, vValues, matrix);
-
-                Console.WriteLine("V_Values:");
-                PrintOneDArray(vValues);
-
-                Console.WriteLine("U_Values");
-                PrintOneDArray(uValues);
-
-                double[][] unallocatedMatrix = CreateUnallocatedMatrix(matrix, allocatedMatrix, uValues, vValues);
-
-                List<Tuple<int, int>> coordinates = new List<Tuple<int, int>>();
-
-                for (int i = 0; i < unallocatedMatrix.Length; i++)
+                bool finished = false;
+                double positiveElement = 0;
+                //while (!finished)
                 {
-                    for (int j = 0; j < unallocatedMatrix[i].Length; j++)
+                    CreateUVArrays(uValues, vValues, matrix);
+
+                    double[][] unallocatedMatrix = CreateUnallocatedMatrix(matrix, allocatedMatrix, uValues, vValues);
+
+                    List<Tuple<int, int>> coordinates = new List<Tuple<int, int>>();
+
+                    int rowIndexOfEnteringElement = 0;
+                    int colIndexOfEnteringElement = 0;
+                    bool shouldBreak = false;
+
+                    for (int i = 0; i < unallocatedMatrix.Length; i++)
                     {
-                        if (unallocatedMatrix[i][j] > 0)
+                        for (int j = 0; j < unallocatedMatrix[i].Length; j++)
                         {
-                            if ((i - 1) >= 0 && (i - 1) < unallocatedMatrix.Length && unallocatedMatrix[i - 1][j] == 0)
+                            if (unallocatedMatrix[i][j] > 0)
                             {
-                                coordinates.Add(Tuple.Create(i - 1, j));
-                            }
-                            else if ((i + 1) >= 0 && (i + 1) < unallocatedMatrix.Length && unallocatedMatrix[i + 1][j] == 0)
-                            {
-                                coordinates.Add(Tuple.Create(i + 1, j));
+                                positiveElement = unallocatedMatrix[i][j];
+                                rowIndexOfEnteringElement = i;
+                                colIndexOfEnteringElement = j;
+                                shouldBreak = true;
+                                break;
                             }
                         }
+
+                        if (shouldBreak)
+                        {
+                            break;
+                        }
                     }
-                }
 
-                foreach (var coordinate in coordinates)
-                {
-                    Console.WriteLine(coordinate.Item1 + " " + coordinate.Item2);
-                }
+                    Print(allocatedMatrix);
+                    coordinates.Add(Tuple.Create(rowIndexOfEnteringElement, colIndexOfEnteringElement));
 
-                matrix.CMatrix = unallocatedMatrix;
+                    //find col neighbours
+
+
+                    //find row neighbours
+                    for (int j = 0; j < allocatedMatrix[0].Length; j++)
+                    {
+                        if (allocatedMatrix[rowIndexOfEnteringElement][j] != 0)
+                        {
+                            coordinates.Add(Tuple.Create(rowIndexOfEnteringElement, j));
+                        }
+                    }
+
+                    foreach (var coo in coordinates)
+                    {
+                        Console.WriteLine(coo.Item1 + " " + coo.Item2);
+                    }
+
+                    //find path
+                    List<Tuple<int, int>> path = new List<Tuple<int, int>>();
+
+
+                    //coordinates.Add(Tuple.Create(rowIndex, colIndex));
+
+                    //if ((rowIndex - 1) >= 0 && (rowIndex - 1) < unallocatedMatrix.Length &&
+                    //    unallocatedMatrix[rowIndex - 1][colIndex] == 0)
+                    //{
+                    //    coordinates.Add(Tuple.Create(rowIndex - 1, colIndex));
+                    //    rowIndex--;
+                    //    colIndex++;
+                    //}
+
+                    //if ((rowIndex + 1) >= 0 && (rowIndex + 1) < unallocatedMatrix.Length &&
+                    //    unallocatedMatrix[rowIndex + 1][colIndex] == 0)
+                    //{
+                    //    coordinates.Add(Tuple.Create(rowIndex + 1, colIndex));
+                    //}
+
+                    //if ((colIndex - 1) >= 0 && (colIndex - 1) < unallocatedMatrix[0].Length &&
+                    //    unallocatedMatrix[rowIndex][colIndex - 1] == 0)
+                    //{
+                    //    coordinates.Add(Tuple.Create(rowIndex, colIndex - 1));
+                    //}
+
+                    //if ((colIndex + 1) >= 0 && (colIndex + 1) < unallocatedMatrix[0].Length &&
+                    //    unallocatedMatrix[rowIndex][colIndex + 1] == 0)
+                    //{
+                    //    coordinates.Add(Tuple.Create(rowIndex, colIndex + 1));
+                    //}
+
+
+                    //    int[][] coordinatesArray = new int[coordinates.Count][];
+
+                    //    for (int i = 0; i < coordinatesArray.Length; i++)
+                    //    {
+                    //        coordinatesArray[i] = new int[2];
+                    //    }
+
+                    //    for (int i = 0; i < coordinatesArray.Length; i++)
+                    //    {
+                    //        coordinatesArray[i][0] = coordinates[i].Item1;
+                    //        coordinatesArray[i][1] = coordinates[i].Item2;
+                    //    }
+
+                    //    PrintInt(coordinatesArray);
+                    //    Console.WriteLine();
+                    //    Console.WriteLine();
+
+                    //    List<double> minValues = new List<double>();
+
+                    //    for (int i = 0; i < coordinatesArray.Length - 1; i++)
+                    //    {
+                    //        if (coordinatesArray[i][1] != coordinatesArray[i + 1][1])
+                    //        {
+                    //            allocatedMatrix[coordinatesArray[i][0]][coordinatesArray[i][1]] =
+                    //                -allocatedMatrix[coordinatesArray[i][0]][coordinatesArray[i][1]];
+
+                    //            allocatedMatrix[coordinatesArray[i + 1][0]][coordinatesArray[i + 1][1]] =
+                    //                -allocatedMatrix[coordinatesArray[i + 1][0]][coordinatesArray[i + 1][1]];
+
+                    //            if (allocatedMatrix[coordinatesArray[i][0]][coordinatesArray[i][1]] != 0)
+                    //            {
+                    //                minValues.Add(allocatedMatrix[coordinatesArray[i][0]][coordinatesArray[i][1]]);
+                    //            }
+                    //        }
+                    //    }
+
+                    //    double minVal = minValues[0];
+
+                    //    for (int i = 0; i < minValues.Count; i++)
+                    //    {
+                    //        if (minValues[i] > minVal)
+                    //        {
+                    //            minVal = minValues[i];
+                    //        }
+                    //    }
+
+                    //    for (int i = 0; i < allocatedMatrix.Length; i++)
+                    //    {
+                    //        for (int j = 0; j < allocatedMatrix[i].Length; j++)
+                    //        {
+                    //            for (int k = 0; k < coordinatesArray.Length; k++)
+                    //            {
+                    //                if (i == coordinatesArray[k][0] && j == coordinatesArray[k][1] &&
+                    //                    allocatedMatrix[i][j] >= 0)
+                    //                {
+                    //                    allocatedMatrix[i][j] = allocatedMatrix[i][j] + Math.Abs(minVal);
+                    //                }
+                    //                else if (i == coordinatesArray[k][0] && j == coordinatesArray[k][1] &&
+                    //                         allocatedMatrix[i][j] < 0)
+                    //                {
+                    //                    allocatedMatrix[i][j] = Math.Abs(allocatedMatrix[i][j]) - Math.Abs(minVal);
+                    //                }
+                    //            }
+                    //        }
+                    //    }
+
+                    //    unallocatedMatrix = CreateUnallocatedMatrix(matrix, allocatedMatrix, uValues, vValues);
+                    //    Console.WriteLine("UN");
+                    //    Print(unallocatedMatrix);
+
+                    //    for (int i = 0; i < unallocatedMatrix.Length; i++)
+                    //    {
+                    //        finished = unallocatedMatrix[i].All(x => x <= 0);
+                    //    }
+                    //}
+
+                    //matrix.TempMatrix = allocatedMatrix;
+                }
             }
 
             return matrix;
+        }
+
+        public void FindColNeighbours(double[][] allocatedMatrix, int colIndexOfEnteringElement)
+        {
+            for (int i = 0; i < allocatedMatrix.Length; i++)
+            {
+                if (allocatedMatrix[i][colIndexOfEnteringElement] != 0)
+                {
+                    coordinates.Add(Tuple.Create(i, colIndexOfEnteringElement));
+                }
+            }
+        }
+        */
+
+        public Matrix UVMethod(Matrix matrix)
+        {
+            double?[] uValues = new double?[matrix.Restrictions - 1];
+            double?[] vValues = new double?[matrix.Variables - 1];
+
+            CreateUVArrays(uValues, vValues, matrix);
+
+            double[][] allocatedMatrix = CreateAllocatedMatrix(matrix);
+
+            Console.WriteLine("Allocated Matrix");
+            Print(allocatedMatrix);
+            Console.WriteLine();
+            Console.WriteLine();
+
+            double[][] potentials = CreatePotentialsMatrix(matrix, allocatedMatrix, uValues, vValues);
+
+            Console.WriteLine("Potentials:");
+            Print(potentials);
+            Console.WriteLine();
+            Console.WriteLine();
+
+            var enteringElementIndexes = FindEnteringElementIndexes(potentials);
+
+            //while (!Optimized(potentials))
+            {
+                enteringElementIndexes = FindEnteringElementIndexes(potentials);
+
+                Console.WriteLine("Row Neighbours:");
+                List<Tuple<int, int>> listOfIndexes = FindRowNeighbours(allocatedMatrix, enteringElementIndexes.Item1);
+                
+                List<Tuple<int, int>> colIndexes = FindColNeighboirs(allocatedMatrix, enteringElementIndexes.Item2);
+
+                foreach (var index in colIndexes)
+                {
+                    listOfIndexes.Add(index);
+                }
+
+                foreach (var index in listOfIndexes)
+                {
+                    Console.WriteLine(index);
+                }
+
+            }
+
+            return matrix;
+        }
+
+        public List<Tuple<int, int>> FindRowNeighbours(double[][] allocatedMatrix, int rowIndexEnteringElement)
+        {
+            List<Tuple<int, int>> indexes = new List<Tuple<int, int>>();
+            for (int j = 0; j < allocatedMatrix[0].Length; j++)
+            {
+                if (allocatedMatrix[rowIndexEnteringElement][j] != 0)
+                {
+                    indexes.Add(Tuple.Create(rowIndexEnteringElement, j));
+                }
+            }
+
+            return indexes;
+        }
+
+        public List<Tuple<int, int>> FindColNeighboirs(double[][] allocatedMatrix, int colIndeEnteringElement)
+        {
+            List<Tuple<int, int>> indexes = new List<Tuple<int, int>>();
+            for (int i = 0; i < allocatedMatrix.Length; i++)
+            {
+                if (allocatedMatrix[i][colIndeEnteringElement] != 0)
+                {
+                    indexes.Add(Tuple.Create(i, colIndeEnteringElement));
+                }
+            }
+
+            return indexes;
+        }
+
+        public bool Optimized(double[][] potentials)
+        {
+            bool finished = false;
+            for (int i = 0; i < potentials.Length; i++)
+            {
+                finished = potentials[i].All(x => x <= 0);
+            }
+
+            return finished;
+        }
+
+        public Tuple<int, int> FindEnteringElementIndexes(double[][] potentials)
+        {
+            int rowIndexEnteringElement = 0;
+            int colIndexEnteringElement = 0;
+            bool shouldBreak = false;
+
+            for (int i = 0; i < potentials.Length; i++)
+            {
+                for (int j = 0; j < potentials[i].Length; j++)
+                {
+                    if (potentials[i][j] > 0)
+                    {
+                        rowIndexEnteringElement = i;
+                        colIndexEnteringElement = j;
+                        shouldBreak = true;
+                        break;
+                    }
+                }
+
+                if (shouldBreak)
+                {
+                    break;
+                }
+            }
+
+            return Tuple.Create(rowIndexEnteringElement, colIndexEnteringElement);
         }
 
         public double[][] CreateAllocatedMatrix(Matrix matrix)
@@ -245,7 +502,7 @@ namespace ConsoleApp1
             return allocatedMatrix;
         }
 
-        public double[][] CreateUnallocatedMatrix(Matrix matrix, double[][] allocatedMatrix, double?[] uValues, double?[] vValues)
+        public double[][] CreatePotentialsMatrix(Matrix matrix, double[][] allocatedMatrix, double?[] uValues, double?[] vValues)
         {
             double[][] unallocatedMatrix = new double[matrix.Restrictions - 1][];
 
@@ -339,6 +596,18 @@ namespace ConsoleApp1
         }
 
         public void Print(double[][] matrix)
+        {
+            for (int i = 0; i < matrix.Length; i++)
+            {
+                for (int j = 0; j < matrix[i].Length; j++)
+                {
+                    Console.Write($"{matrix[i][j],5}");
+                }
+                Console.WriteLine();
+            }
+        }
+
+        public void PrintInt(int[][] matrix)
         {
             for (int i = 0; i < matrix.Length; i++)
             {
