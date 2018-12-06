@@ -10,6 +10,8 @@ namespace T_task.Controllers
 
         public ActionResult VarsRestr()
         {
+            ViewBag.Selected = "LowCost";
+
             return View(_matrix);
         }
 

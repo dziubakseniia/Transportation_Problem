@@ -10,6 +10,8 @@ namespace T_task.Controllers.Start
 
         public ActionResult VarsRestr()
         {
+            ViewBag.Selected = "NorthWest";
+
             return View(_matrix);
         }
 
@@ -32,13 +34,13 @@ namespace T_task.Controllers.Start
                 _matrix.CMatrix[i] = new double[_matrix.Variables + 1];
             }
 
-            for (int i = 0; i < _matrix.Restrictions; i++)
-            {
-                for (int j = 0; j < _matrix.Variables; j++)
-                {
-                    _matrix.CMatrix[i][j] = 1;
-                }
-            }
+            //for (int i = 0; i < _matrix.Restrictions; i++)
+            //{
+            //    for (int j = 0; j < _matrix.Variables; j++)
+            //    {
+            //        _matrix.CMatrix[i][j] = 1;
+            //    }
+            //}
 
             return View(_matrix);
         }

@@ -3,20 +3,23 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <title>@ViewBag.Title</title>
     <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
     <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <script src="~/Scripts/modernizr-2.6.2.js"></script>
 </head>
-<body>
-    <ul class="nav nav-tabs">
-        <li class="nav-item">@Html.ActionLink("North West", "VarsRestr", "Start",  null, new { @class = "nav-link" })</li>
-        <li class="nav-item">@Html.ActionLink("Low Cost", "VarsRestr", "LowCost", null, new { @class = "nav-link" })</li>
-    </ul>
-    <div class="container body-content">
-        @RenderBody()
+<body class="ml-3">
+    <h1>Дослідження операцій</h1>
+<div class="row">
+    <div class="col-3 d-none d-sm-block mt-3">
+        <ul class="nav nav-pills flex-column">
+            <li class="nav-item">@Html.ActionLink("Метод Північно-Західного кута", "VarsRestr", "Start", null, new {@class = "nav-link" + (ViewBag.Selected == "NorthWest" ? " btn-success text-light" : " text-success")})</li>
+            <li class="nav-item">@Html.ActionLink("Метод найменших витрат", "VarsRestr", "LowCost", null, new {@class = "nav-link" + (ViewBag.Selected == "LowCost" ? " btn-success text-light" : " text-success") })</li>
+        </ul>
     </div>
-
+    <div class="tab-content mt-3 col-sm-8 ">
+        @RenderBody()
+    </div></div>
     <script src="~/Scripts/jquery-1.10.2.min.js"></script>
     <script src="~/Scripts/bootstrap.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>

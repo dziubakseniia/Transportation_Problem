@@ -1,17 +1,21 @@
 ﻿@model T_task.Models.Matrix
 
 @{
-    ViewBag.Title = "title";
+    ViewBag.Title = "North West Corner";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
 }
 
 @using (Html.BeginForm())
 {
-    @Html.Label("Кількість міст:")
-    @Html.TextBoxFor(x => Model.Variables)
-    @Html.Label("Кількість одиниць товару:")
-    @Html.TextBoxFor(x => Model.Restrictions)
-
-    <input type="submit" value="Скласти задачу Північно-Західного кута" class = "btn"/>
+    <div class="col-3 d-inline-block">@Html.Label("Кількість міст:")</div>
+    <div class="d-inline-block">@Html.TextBoxFor(x => Model.Variables, null, new { @class = "form-control" })</div>
+    <br />
+    <br />
+    <div class="col-3 d-inline-block">
+        @Html.Label("Кількість одиниць товару:")
+    </div>
+    <div class="d-inline-block">@Html.TextBoxFor(x => Model.Restrictions, null, new { @class = "form-control" })</div>
+    <br />
+    <br /><div class="col-9 mx-auto"><input type="submit" value="Скласти задачу" class="btn btn-success" /></div>
 }

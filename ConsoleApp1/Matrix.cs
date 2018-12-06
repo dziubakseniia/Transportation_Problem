@@ -187,17 +187,7 @@ namespace ConsoleApp1
 
             double[][] allocatedMatrix = CreateAllocatedMatrix(matrix);
 
-            Console.WriteLine("Allocated Matrix");
-            Print(allocatedMatrix);
-            Console.WriteLine();
-            Console.WriteLine();
-
             double[][] potentials = CreatePotentialsMatrix(matrix, allocatedMatrix, uValues, vValues);
-
-            Console.WriteLine("Potentials:");
-            Print(potentials);
-            Console.WriteLine();
-            Console.WriteLine();
 
             List<Tuple<int, int>> path = new List<Tuple<int, int>>();
             double min = double.MaxValue;
@@ -453,28 +443,6 @@ namespace ConsoleApp1
                     }
                 }
             }
-        }
-
-        public bool CheckAllocatedElements(double[][] allocatedMatrix)
-        {
-            int numbers = 0;
-            for (int i = 0; i < allocatedMatrix.Length; i++)
-            {
-                for (int j = 0; j < allocatedMatrix[i].Length; j++)
-                {
-                    if (allocatedMatrix[i][j] != 0)
-                    {
-                        numbers++;
-                    }
-                }
-            }
-
-            if (numbers == ((allocatedMatrix.Length - 1) + (allocatedMatrix[0].Length - 1) - 1))
-            {
-                return true;
-            }
-
-            return false;
         }
 
         public double Sum(double[][] matrix, double[][] tempMatrix)
