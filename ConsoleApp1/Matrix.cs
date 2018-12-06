@@ -1,5 +1,6 @@
 ﻿using System;
 using System.CodeDom;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -389,38 +390,109 @@ namespace ConsoleApp1
             Console.WriteLine();
             Console.WriteLine();
 
-            var enteringElementIndexes = FindEnteringElementIndexes(potentials);
+            List<Tuple<int, int>> path = new List<Tuple<int, int>>();
+            double min = 0;
 
-            //while (!Optimized(potentials))
+            while (!Optimized(potentials))
             {
-                enteringElementIndexes = FindEnteringElementIndexes(potentials);
+                var enteringElementIndexes = FindEnteringElementIndexes(potentials);
+                path = FindPath(potentials, enteringElementIndexes.Item1, enteringElementIndexes.Item2);
 
-                Console.WriteLine("Row Neighbours:");
-                List<Tuple<int, int>> listOfIndexes = FindRowNeighbours(allocatedMatrix, enteringElementIndexes.Item1);
-                
-                List<Tuple<int, int>> colIndexes = FindColNeighboirs(allocatedMatrix, enteringElementIndexes.Item2);
-
-                foreach (var index in colIndexes)
+                foreach (var tuple in path)
                 {
-                    listOfIndexes.Add(index);
+                    if (allocatedMatrix[tuple.Item1][tuple.Item2] < min)
+                    {
+                        min = allocatedMatrix[tuple.Item1][tuple.Item2];
+                    }
                 }
 
-                foreach (var index in listOfIndexes)
+                allocatedMatrix[enteringElementIndexes.Item1][enteringElementIndexes.Item2] = min;
+
+                foreach (var tuple in path)
                 {
-                    Console.WriteLine(index);
+                        allocatedMatrix[tuple.Item1][tuple.Item2] -= min;
                 }
 
+                potentials = CreatePotentialsMatrix(matrix, allocatedMatrix, uValues, vValues);
             }
 
             return matrix;
         }
 
-        public List<Tuple<int, int>> FindRowNeighbours(double[][] allocatedMatrix, int rowIndexEnteringElement)
+        public List<Tuple<int, int>> FindPath(double[][] potentials, int rowIndexEnteringElement, int colIndexEnteringElement)
+        {
+            List<Tuple<int, int>> path = new List<Tuple<int, int>>();
+            List<List<Tuple<int, int>>> wrongPath = new List<List<Tuple<int, int>>>();
+
+            List<Tuple<int, int>> rowIndexes = FindRowNeighbours(potentials, rowIndexEnteringElement);
+
+            List<Tuple<int, int>> colIndexes = FindColNeighboirs(potentials, colIndexEnteringElement);
+
+            Tuple<int, int> nextNode;
+
+            foreach (var index in colIndexes)
+            {
+                path.Add(index);
+                while (true)
+                {
+                    nextNode = FindNextNode(potentials, path, wrongPath);
+                    if (nextNode != null)
+                    {
+                        path.Add(nextNode);
+                        if (rowIndexes.Contains(nextNode) && path.Count % 2 != 0)
+                        {
+                            return path;
+                        }
+                    }
+                    else if (path.Count == 1)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        wrongPath.Add(path);
+                        List<Tuple<int, int>> tempTuple = new List<Tuple<int, int>>();
+                        tempTuple.Add(index);
+                        path = tempTuple;
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        public Tuple<int, int> FindNextNode(double[][] potentials, List<Tuple<int, int>> path, List<List<Tuple<int, int>>> wrongPath)
+        {
+            List<Tuple<int, int>> nodes = new List<Tuple<int, int>>();
+            if (path.Count % 2 == 0)
+            {
+                nodes = FindColNeighboirs(potentials, path[path.Count - 1].Item2);
+            }
+            else
+            {
+                nodes = FindRowNeighbours(potentials, path[path.Count - 1].Item1);
+            }
+
+            foreach (var node in nodes)
+            {
+                List<Tuple<int, int>> tempNodes = new List<Tuple<int, int>>();
+                tempNodes.AddRange(path);
+                tempNodes.Add(node);
+                if (!path.Contains(node) && !wrongPath.Contains(tempNodes))
+                {
+                    return node;
+                }
+            }
+
+            return null;
+        }
+
+        public List<Tuple<int, int>> FindRowNeighbours(double[][] potentials, int rowIndexEnteringElement)
         {
             List<Tuple<int, int>> indexes = new List<Tuple<int, int>>();
-            for (int j = 0; j < allocatedMatrix[0].Length; j++)
+            for (int j = 0; j < potentials[0].Length; j++)
             {
-                if (allocatedMatrix[rowIndexEnteringElement][j] != 0)
+                if (potentials[rowIndexEnteringElement][j] == 0)
                 {
                     indexes.Add(Tuple.Create(rowIndexEnteringElement, j));
                 }
@@ -429,12 +501,12 @@ namespace ConsoleApp1
             return indexes;
         }
 
-        public List<Tuple<int, int>> FindColNeighboirs(double[][] allocatedMatrix, int colIndeEnteringElement)
+        public List<Tuple<int, int>> FindColNeighboirs(double[][] potentials, int colIndeEnteringElement)
         {
             List<Tuple<int, int>> indexes = new List<Tuple<int, int>>();
-            for (int i = 0; i < allocatedMatrix.Length; i++)
+            for (int i = 0; i < potentials.Length; i++)
             {
-                if (allocatedMatrix[i][colIndeEnteringElement] != 0)
+                if (potentials[i][colIndeEnteringElement] == 0)
                 {
                     indexes.Add(Tuple.Create(i, colIndeEnteringElement));
                 }
@@ -445,13 +517,18 @@ namespace ConsoleApp1
 
         public bool Optimized(double[][] potentials)
         {
-            bool finished = false;
             for (int i = 0; i < potentials.Length; i++)
             {
-                finished = potentials[i].All(x => x <= 0);
+                for (int j = 0; j < potentials[i].Length; j++)
+                {
+                    if (potentials[i][j] < 0)
+                    {
+                        return false;
+                    }
+                }
             }
 
-            return finished;
+            return true;
         }
 
         public Tuple<int, int> FindEnteringElementIndexes(double[][] potentials)
