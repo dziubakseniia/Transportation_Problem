@@ -24,6 +24,8 @@ namespace T_task.Controllers
 
         public ActionResult LowCost(string variables, string restrictions)
         {
+            ViewBag.Selected = "LowCost";
+
             _matrix.Variables = Convert.ToInt32(variables);
             _matrix.Restrictions = Convert.ToInt32(restrictions);
 

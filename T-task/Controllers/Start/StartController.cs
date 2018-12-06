@@ -24,6 +24,8 @@ namespace T_task.Controllers.Start
 
         public ActionResult NorthWest(string variables, string restrictions)
         {
+            ViewBag.Selected = "NorthWest";
+
             _matrix.Variables = Convert.ToInt32(variables);
             _matrix.Restrictions = Convert.ToInt32(restrictions);
 
@@ -34,13 +36,13 @@ namespace T_task.Controllers.Start
                 _matrix.CMatrix[i] = new double[_matrix.Variables + 1];
             }
 
-            //for (int i = 0; i < _matrix.Restrictions; i++)
-            //{
-            //    for (int j = 0; j < _matrix.Variables; j++)
-            //    {
-            //        _matrix.CMatrix[i][j] = 1;
-            //    }
-            //}
+            for (int i = 0; i < _matrix.Restrictions; i++)
+            {
+                for (int j = 0; j < _matrix.Variables; j++)
+                {
+                    _matrix.CMatrix[i][j] = 1;
+                }
+            }
 
             return View(_matrix);
         }
