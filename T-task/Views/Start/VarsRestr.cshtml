@@ -9,13 +9,13 @@
 @using (Html.BeginForm())
 {
     <div class="col-3 d-inline-block">@Html.Label("Кількість міст:")</div>
-    <div class="d-inline-block">@Html.TextBoxFor(x => Model.Restrictions, null, new { @class = "form-control", placeholder="cities"})</div>
+    <div class="d-inline-block">@Html.TextBoxFor(x => Model.Restrictions, null, new { @class = "form-control", placeholder = "cities" })</div>
     <br />
     <br />
     <div class="col-3 d-inline-block">
         @Html.Label("Кількість компаній:")
     </div>
-    <div class="d-inline-block">@Html.TextBoxFor(x => Model.Variables, null, new { @class = "form-control" })</div>
+    <div class="d-inline-block">@Html.TextBoxFor(x => Model.Variables, null, new { @class = "form-control"})</div>
     <br />
     <br /><div class="col-9 mx-auto"><input type="submit" value="Скласти задачу" class="btn btn-success" /></div>
 }

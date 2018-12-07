@@ -1,10 +1,13 @@
 ﻿using System;
+using System.CodeDom;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 
-namespace T_task.Models
+namespace ConsoleApp1
 {
-    public class Matrix
+    public class Matrix1
     {
         public double[][] CMatrix { get; set; }
         public double[][] TempMatrix { get; set; }
@@ -12,7 +15,7 @@ namespace T_task.Models
         public int Variables { get; set; }
         public int Restrictions { get; set; }
 
-        public double NorthWest(Matrix matrix)
+        public Matrix1 NorthWest(Matrix1 matrix)
         {
             CreateTempMatrix(matrix);
 
@@ -30,10 +33,10 @@ namespace T_task.Models
                 }
             }
 
-            return Sum(matrix.CMatrix, matrix.TempMatrix);
+            return matrix;
         }
 
-        public double LowCost(Matrix matrix)
+        public Matrix1 LeastCost(Matrix1 matrix)
         {
             CreateTempMatrix(matrix);
 
@@ -65,22 +68,22 @@ namespace T_task.Models
                 minRowIndex = minRowColIndexes.Item2;
                 minColIndex = minRowColIndexes.Item3;
 
-                double minVal = Math.Min(tArray[tArray.Length - 1][minColIndex],
-                    tArray[minRowIndex][tArray[minRowIndex].Length - 1]);
+                double minVal = Math.Min(tArray[matrix.CMatrix.Length - 1][minColIndex],
+                    tArray[minRowIndex][matrix.CMatrix[minRowIndex].Length - 1]);
 
                 matrix.TempMatrix[minRowIndex][minColIndex] = minVal;
 
-                tArray[tArray.Length - 1][minColIndex] -= minVal;
-                tArray[minRowIndex][tArray[minRowIndex].Length - 1] -= minVal;
+                tArray[matrix.CMatrix.Length - 1][minColIndex] -= minVal;
+                tArray[minRowIndex][matrix.CMatrix[minRowIndex].Length - 1] -= minVal;
 
                 MakeCol0(tArray, matrix, minColIndex);
                 MakeRow0(tArray, matrix, minRowIndex);
             }
 
-            return Sum(matrix.CMatrix, matrix.TempMatrix);
+            return matrix;
         }
 
-        public void CreateTempMatrix(Matrix matrix)
+        public void CreateTempMatrix(Matrix1 matrix)
         {
             TempMatrix = new double[matrix.Restrictions][];
 
@@ -90,7 +93,7 @@ namespace T_task.Models
             }
         }
 
-        public void CopyCMatrixToTArray(double[][] tArray, Matrix matrix)
+        public void CopyCMatrixToTArray(double[][] tArray, Matrix1 matrix)
         {
             for (int i = 0; i < matrix.Restrictions; i++)
             {
@@ -138,9 +141,9 @@ namespace T_task.Models
             return Tuple.Create(min, minRowIndex, minColIndex);
         }
 
-        public void MakeCol0(double[][] tArray, Matrix matrix, int minColIndex)
+        public void MakeCol0(double[][] tArray, Matrix1 matrix, int minColIndex)
         {
-            if (tArray[tArray.Length - 1][minColIndex] == 0)
+            if (tArray[matrix.CMatrix.Length - 1][minColIndex] == 0)
             {
                 int k = 0;
                 while (k < matrix.Restrictions)
@@ -151,9 +154,9 @@ namespace T_task.Models
             }
         }
 
-        public void MakeRow0(double[][] tArray, Matrix matrix, int minRowIndex)
+        public void MakeRow0(double[][] tArray, Matrix1 matrix, int minRowIndex)
         {
-            if (tArray[minRowIndex][tArray[minRowIndex].Length - 1] == 0)
+            if (tArray[minRowIndex][matrix.CMatrix[minRowIndex].Length - 1] == 0)
             {
                 int k = 0;
                 while (k < matrix.Variables)
@@ -175,22 +178,7 @@ namespace T_task.Models
             return false;
         }
 
-        public double Sum(double[][] matrix, double[][] tempMatrix)
-        {
-            double sum = 0;
-            for (int i = 0; i < Restrictions; i++)
-            {
-                for (int j = 0; j < Variables; j++)
-                {
-                    matrix[i][j] *= tempMatrix[i][j];
-                    sum += matrix[i][j];
-                }
-            }
-
-            return sum;
-        }
-
-        public double UVMethod(Matrix matrix)
+        public double UVMethod(Matrix1 matrix)
         {
             double?[] uValues = new double?[matrix.Restrictions - 1];
             double?[] vValues = new double?[matrix.Variables - 1];
@@ -370,7 +358,7 @@ namespace T_task.Models
             return Tuple.Create(rowIndexEnteringElement, colIndexEnteringElement);
         }
 
-        public double[][] CreateAllocatedMatrix(Matrix matrix)
+        public double[][] CreateAllocatedMatrix(Matrix1 matrix)
         {
             double[][] allocatedMatrix = new double[matrix.Restrictions][];
 
@@ -390,7 +378,7 @@ namespace T_task.Models
             return allocatedMatrix;
         }
 
-        public double[][] CreatePotentialsMatrix(Matrix matrix, double[][] allocatedMatrix, double?[] uValues, double?[] vValues)
+        public double[][] CreatePotentialsMatrix(Matrix1 matrix, double[][] allocatedMatrix, double?[] uValues, double?[] vValues)
         {
             double[][] unallocatedMatrix = new double[matrix.Restrictions - 1][];
 
@@ -421,10 +409,18 @@ namespace T_task.Models
                 }
             }
 
+            for (int i = 0; i < matrix.Restrictions - 1; i++)
+            {
+                for (int j = 0; j < matrix.Variables - 1; j++)
+                {
+                    unallocatedMatrix[i][j] = matrix.CMatrix[i][j] - (double)vValues[j] + (double)uValues[i];
+                }
+            }
+
             return unallocatedMatrix;
         }
 
-        public void CreateUVArrays(double?[] uValues, double?[] vValues, Matrix matrix)
+        public void CreateUVArrays(double?[] uValues, double?[] vValues, Matrix1 matrix)
         {
             for (int i = 0; i < uValues.Length; i++)
             {
@@ -457,5 +453,31 @@ namespace T_task.Models
             }
         }
 
+        public double Sum(double[][] matrix, double[][] tempMatrix)
+        {
+            double sum = 0;
+            for (int i = 0; i < matrix.Length; i++)
+            {
+                for (int j = 0; j < matrix[i].Length; j++)
+                {
+                    matrix[i][j] *= tempMatrix[i][j];
+                    sum += matrix[i][j];
+                }
+            }
+
+            return sum;
+        }
+
+        public void Print(double[][] matrix)
+        {
+            for (int i = 0; i < matrix.Length; i++)
+            {
+                for (int j = 0; j < matrix[i].Length; j++)
+                {
+                    Console.Write($"{matrix[i][j],5}");
+                }
+                Console.WriteLine();
+            }
+        }
     }
 }
