@@ -55,6 +55,28 @@ namespace ConsoleApp1
             Console.WriteLine();
             Console.WriteLine();
             Console.WriteLine(matrix.Sum(matrix.CMatrix, matrix.TempMatrix));
+
+
+            matrix.Variables = Convert.ToInt32(4);
+            matrix.Restrictions = Convert.ToInt32(3);
+
+            matrix.CMatrix = new double[matrix.Restrictions + 1][];
+
+            for (int i = 0; i < matrix.Restrictions + 1; i++)
+            {
+                matrix.CMatrix[i] = new double[matrix.Variables + 1];
+            }
+
+            for (int i = 0; i < matrix.Restrictions; i++)
+            {
+                for (int j = 0; j < matrix.Variables; j++)
+                {
+                    matrix.CMatrix[i][j] = 1;
+                }
+            }
+
+            Console.WriteLine(matrix.CMatrix.Length);
+            Console.WriteLine(matrix.CMatrix[0].Length);
         }
     }
 }
