@@ -11,14 +11,7 @@
     <div class="row ml-1 pb-3 border-bottom">
         @for (int i = 0; i < Model.Restrictions; i++)
         {
-            if (Model.Restrictions == 4 && Model.Variables == 4)
-            {
-                <div hidden>@Html.TextBoxFor(x => Model.CMatrix[4][4], null, new { @placeholder = "Місто " + @i + 1, @class = "form-control" })</div>
-            }
-            if (Model.Restrictions == 3 && Model.Variables == 4)
-            {
-                <div hidden>@Html.TextBoxFor(x => Model.CMatrix[3][4], null, new { @placeholder = "Місто " + @i + 1, @class = "form-control" })</div>
-            }
+            <div hidden>@Html.TextBoxFor(x => Model.CMatrix[Model.Restrictions][Model.Variables], null, new { @placeholder = "Місто " + @i + 1, @class = "form-control" })</div>
             if (i == 0)
             {
                 <div class="input-group mt-2 col-4">
@@ -150,7 +143,7 @@
                         </div>
                         @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Житлобуд-1", @class = "form-control" })
                         <div class="input-group-append">
-                            <span class="input-group-text">тис. стекол</span>
+                            <span class="input-group-text">тис. грн</span>
                         </div>
                     </div>
                 }
@@ -162,7 +155,7 @@
                         </div>
                         @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Житлобуд-2", @class = "form-control" })
                         <div class="input-group-append">
-                            <span class="input-group-text">тис. стекол</span>
+                            <span class="input-group-text">тис. грн</span>
                         </div>
                     </div>
                 }
@@ -174,7 +167,7 @@
                         </div>
                         @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Петрівський квартал", @class = "form-control" })
                         <div class="input-group-append">
-                            <span class="input-group-text">тис. стекол</span>
+                            <span class="input-group-text">тис. грн</span>
                         </div>
                     </div>
                 }
@@ -186,7 +179,7 @@
                         </div>
                         @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Інтерхол Буд", @class = "form-control" })
                         <div class="input-group-append">
-                            <span class="input-group-text">тис. стекол</span>
+                            <span class="input-group-text">тис. грн</span>
                         </div>
                     </div>
                 }
@@ -200,7 +193,7 @@
                             </div>
                             @Html.TextBoxFor(x => Model.CMatrix[i][k], null, new { @placeholder = "Компанія" + @i + 1, @class = "form-control" })
                             <div class="input-group-append">
-                                <span class="input-group-text">тис. стекол</span>
+                                <span class="input-group-text">тис. грн</span>
                             </div>
                         </div>
                     }
@@ -214,7 +207,7 @@
                         </div>
                         @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Житлобуд-1", @class = "form-control" })
                         <div class="input-group-append">
-                            <span class="input-group-text">тис. стекол</span>
+                            <span class="input-group-text">тис. грн</span>
                         </div>
                     </div>
                 }
@@ -226,7 +219,7 @@
                         </div>
                         @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Житлобуд-2", @class = "form-control" })
                         <div class="input-group-append">
-                            <span class="input-group-text">тис. стекол</span>
+                            <span class="input-group-text">тис. грн</span>
                         </div>
                     </div>
                 }
@@ -238,7 +231,7 @@
                         </div>
                         @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Петрівський квартал", @class = "form-control" })
                         <div class="input-group-append">
-                            <span class="input-group-text">тис. стекол</span>
+                            <span class="input-group-text">тис. грн</span>
                         </div>
                     </div>
                 }
@@ -250,7 +243,7 @@
                         </div>
                         @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Інтерхол Буд", @class = "form-control" })
                         <div class="input-group-append">
-                            <span class="input-group-text">тис. стекол</span>
+                            <span class="input-group-text">тис. грн</span>
                         </div>
                     </div>
                 }
@@ -264,7 +257,7 @@
                             </div>
                             @Html.TextBoxFor(x => Model.CMatrix[i][k], null, new { @placeholder = "Компанія" + @i + 1, @class = "form-control" })
                             <div class="input-group-append">
-                                <span class="input-group-text">тис. стекол</span>
+                                <span class="input-group-text">тис. грн</span>
                             </div>
                         </div>
                     }
@@ -278,7 +271,7 @@
                         </div>
                         @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Житлобуд-1", @class = "form-control" })
                         <div class="input-group-append">
-                            <span class="input-group-text">тис. стекол</span>
+                            <span class="input-group-text">тис. грн</span>
                         </div>
                     </div>
                 }
@@ -290,7 +283,7 @@
                         </div>
                         @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Житлобуд-2", @class = "form-control" })
                         <div class="input-group-append">
-                            <span class="input-group-text">тис. стекол</span>
+                            <span class="input-group-text">тис. грн</span>
                         </div>
                     </div>
                 }
@@ -314,7 +307,7 @@
                         </div>
                         @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Інтерхол Буд", @class = "form-control" })
                         <div class="input-group-append">
-                            <span class="input-group-text">тис. стекол</span>
+                            <span class="input-group-text">тис. грн</span>
                         </div>
                     </div>
                 }
@@ -328,7 +321,7 @@
                             </div>
                             @Html.TextBoxFor(x => Model.CMatrix[i][k], null, new { @placeholder = "Компанія" + @i + 1, @class = "form-control" })
                             <div class="input-group-append">
-                                <span class="input-group-text">тис. стекол</span>
+                                <span class="input-group-text">тис. грн</span>
                             </div>
                         </div>
                     }
@@ -342,7 +335,7 @@
                         </div>
                         @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Житлобуд-1", @class = "form-control" })
                         <div class="input-group-append">
-                            <span class="input-group-text">тис. стекол</span>
+                            <span class="input-group-text">тис. грн</span>
                         </div>
                     </div>
                 }
@@ -354,7 +347,7 @@
                         </div>
                         @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Житлобуд-2", @class = "form-control" })
                         <div class="input-group-append">
-                            <span class="input-group-text">тис. стекол</span>
+                            <span class="input-group-text">тис. грн</span>
                         </div>
                     </div>
                 }
@@ -366,7 +359,7 @@
                         </div>
                         @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Петрівський квартал", @class = "form-control" })
                         <div class="input-group-append">
-                            <span class="input-group-text">тис. стекол</span>
+                            <span class="input-group-text">тис. грн</span>
                         </div>
                     </div>
                 }
@@ -378,7 +371,7 @@
                         </div>
                         @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Інтерхол Буд", @class = "form-control" })
                         <div class="input-group-append">
-                            <span class="input-group-text">тис. стекол</span>
+                            <span class="input-group-text">тис. грн</span>
                         </div>
                     </div>
                 }
@@ -392,7 +385,7 @@
                             </div>
                             @Html.TextBoxFor(x => Model.CMatrix[i][k], null, new { @placeholder = "Компанія" + @i + 1, @class = "form-control" })
                             <div class="input-group-append">
-                                <span class="input-group-text">тис. стекол</span>
+                                <span class="input-group-text">тис. грн</span>
                             </div>
                         </div>
                     }
