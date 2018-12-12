@@ -12,7 +12,7 @@ namespace T_task
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Start", action = "VarsRestr", id = UrlParameter.Optional }
+                defaults: new { controller = "LowCost", action = "VarsRestr", id = UrlParameter.Optional }
             );
         }
     }

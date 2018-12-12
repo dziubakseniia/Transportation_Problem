@@ -8,12 +8,13 @@
 
 @using (Html.BeginForm())
 {
-    <div class="col-3 d-inline-block">@Html.Label("Кількість міст:")</div>
+    <h3>Розрахувати мінімальну вартість транспортування стекол <br/>з міст-склофабрик до будівельних компаній:</h3>
+    <div class="col-4 d-inline-block">@Html.Label("Уведіть кількість міст-склофабрик:")</div>
     <div class="d-inline-block">@Html.TextBoxFor(x => Model.Restrictions, null, new { @class = "form-control", placeholder = "cities" })</div>
     <br />
     <br />
-    <div class="col-3 d-inline-block">
-        @Html.Label("Кількість компаній:")
+    <div class="col-4 d-inline-block">
+        @Html.Label("Уведіть кількість компаній:")
     </div>
     <div class="d-inline-block">@Html.TextBoxFor(x => Model.Variables, null, new { @class = "form-control" })</div>
     <br />

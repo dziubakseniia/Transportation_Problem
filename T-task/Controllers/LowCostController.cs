@@ -105,7 +105,8 @@ namespace T_task.Controllers
             matrix.Variables += 1;
             matrix.Restrictions += 1;
 
-            ViewBag.Matrix = matrix.LowCost(matrix);
+            ViewBag.Result = matrix.LowCost(matrix);
+            ViewBag.Matrix = matrix.TempMatrix;
 
             return View("LowCostResult");
         }
