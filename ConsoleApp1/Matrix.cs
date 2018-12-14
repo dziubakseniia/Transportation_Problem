@@ -11,7 +11,15 @@ namespace ConsoleApp1
 
         public int Variables { get; set; }
         public int Restrictions { get; set; }
+        public double[][] Lines { get; set; }
 
+        private int numLines;
+        private int[] rows;
+        private double[] occupiedCols;
+        private List<Tuple<int, int>> indexes = new List<Tuple<int, int>>();
+
+        #region TransportationProblem     
+        /*
         public Matrix NorthWest(Matrix matrix)
         {
             CreateTempMatrix(matrix);
@@ -170,7 +178,7 @@ namespace ConsoleApp1
             if (tArray[tArray.Length - 1].SequenceEqual(expectedArray))
             {
                 return true;
-            }
+            }   
 
             return false;
         }
@@ -456,7 +464,259 @@ namespace ConsoleApp1
 
             return sum;
         }
+        */
+        #endregion
 
+        #region AssignmentProblem
+
+        public double[][] HungarianMethod()
+        {
+            CreateTempMatrix(this);
+            rows = new int[Restrictions];
+            occupiedCols = new double[Restrictions];
+
+            TempMatrix = SubtractMinFromRow();
+            TempMatrix = SubtractMinFromCol();
+
+            CrossZeros();
+            while (numLines < Restrictions)
+            {
+                createAdditionalZeros();
+                CrossZeros();
+            }
+
+            IsOptimal();
+            return TempMatrix;
+        }
+
+        private double[][] SubtractMinFromRow()
+        {
+            List<double> minList = FindMinInRow();
+            for (int i = 0; i < Restrictions; i++)
+            {
+                for (int j = 0; j < Variables; j++)
+                {
+                    TempMatrix[i][j] -= minList[i];
+                }
+            }
+
+            return CMatrix;
+        }
+
+        private double[][] SubtractMinFromCol()
+        {
+            List<double> minList = FindMinInColumn();
+            for (int j = 0; j < Variables; j++)
+            {
+                for (int i = 0; i < Restrictions; i++)
+                {
+                    CMatrix[i][j] -= minList[j];
+                }
+            }
+
+            return CMatrix;
+        }
+
+        private List<double> FindMinInRow()
+        {
+            List<double> minList = new List<double>();
+            for (int i = 0; i < Restrictions; i++)
+            {
+                var min = CMatrix[i][0];
+                for (int j = 0; j < Variables; j++)
+                {
+                    if (CMatrix[i][j] < min)
+                    {
+                        min = CMatrix[i][j];
+                    }
+                }
+                minList.Add(min);
+            }
+
+            return minList;
+        }
+
+        private List<double> FindMinInColumn()
+        {
+            List<double> minList = new List<double>();
+            for (int j = 0; j < Variables; j++)
+            {
+                var min = CMatrix[0][j];
+                for (int i = 0; i < Restrictions; i++)
+                {
+                    if (CMatrix[i][j] < min)
+                    {
+                        min = CMatrix[i][j];
+                    }
+                }
+                minList.Add(min);
+            }
+
+            return minList;
+        }
+
+        private void CrossZeros()
+        {
+            numLines = 0;
+            Lines= new double[Restrictions][];
+            for (int i = 0; i < Restrictions; i++)
+            {
+                Lines[i] = new double[Variables];
+            }
+
+            for (int i = 0; i < Restrictions; i++)
+            {
+                for (int j = 0; j < Variables; j++)
+                {
+                    if (TempMatrix[i][j] == 0)
+                    {
+                        crossedNeighbours(i, j, MaxVerticalHorizontal(i, j));
+                        indexes.Add(new Tuple<int, int>(i, j));
+                    }
+                }
+            }
+
+            Console.WriteLine("Indexes:");
+            foreach (var index in indexes)
+            {
+                Console.WriteLine(index.Item1 + " " + index.Item2);
+            }
+        }
+
+        private int MaxVerticalHorizontal(int row, int col)
+        {
+            int result = 0;
+            for (int i = 0; i < Restrictions; i++)
+            {
+                if(TempMatrix[i][col] == 0)
+                {
+                    result++;
+                }
+
+                if (TempMatrix[row][i] == 0)
+                {
+                    result--;
+                }
+            }
+
+            return result;
+        }
+
+        private void crossedNeighbours(int row, int col, int maxVerticalHorizontal)
+        {
+            if (Lines[row][col] == 2)
+            {
+                return;
+            }
+
+            if (maxVerticalHorizontal > 0 && Lines[row][col] == 1)
+            {
+                return;
+            }
+
+            if (maxVerticalHorizontal <= 0 && Lines[row][col] == -1)
+            {
+                return;
+            }
+
+            for (int i = 0; i < Restrictions; i++)
+            {
+                if (maxVerticalHorizontal > 0)
+                {
+                    Lines[i][col] = Lines[i][col] == -1 || Lines[i][col] == 2 ? 2 : 1;
+                }
+                else
+                {
+                    Lines[row][i] = Lines[row][i] == 1 || Lines[row][i] == 2 ? 2 : -1;
+                }
+            }
+
+            numLines++;
+        }
+
+        public void createAdditionalZeros()
+        {
+            double minUncoveredValue = 0;
+
+            for (int i = 0; i < Restrictions; i++)
+            {
+                for (int j = 0; j < Variables; j++)
+                {
+                    if (Lines[i][j] == 0 && (TempMatrix[i][j] < minUncoveredValue || minUncoveredValue == 0))
+                    {
+                        minUncoveredValue = TempMatrix[i][j];
+                    }
+                }
+            }
+
+            for (int i = 0; i < Restrictions; i++)
+            {
+                for (int j = 0; j < Variables; j++)
+                {
+                    if (Lines[i][j] == 0)
+                    {
+                        TempMatrix[i][j] -= minUncoveredValue;
+                    }
+                    else if (Lines[i][j] == 2)
+                    {
+                        TempMatrix[i][j] += minUncoveredValue;
+                    }
+                }
+            }
+        }
+
+        private bool IsOptimal(int row)
+        {
+            if (row == rows.Length)
+            {
+                return true;
+            }
+
+            for (int col = 0; col < Variables; col++)
+            {
+                if (TempMatrix[row][col] == 0 && occupiedCols[col] == 0)
+                {
+                    rows[row] = col;
+                    occupiedCols[col] = 1;
+                    if (IsOptimal(row + 1))
+                    {
+                        return true;
+                    }
+
+                    occupiedCols[col] = 0;
+                }
+            }
+
+            return false;
+        }
+
+        public bool IsOptimal()
+        {
+            return IsOptimal(0);
+        }
+
+        public double GetTotal()
+        {
+            double total = 0;
+            for (int i = 0; i < Restrictions; i++)
+            {
+                total += CMatrix[i][rows[i]];
+            }
+
+            return total;
+        }
+
+        public void CreateTempMatrix(Matrix matrix)
+        {
+            TempMatrix = new double[matrix.Restrictions][];
+
+            for (int i = 0; i < matrix.Restrictions; i++)
+            {
+                matrix.TempMatrix[i] = new double[matrix.Variables];
+            }
+        }
+
+        #endregion
         public void Print(double[][] matrix)
         {
             for (int i = 0; i < matrix.Length; i++)

@@ -6,7 +6,8 @@ namespace ConsoleApp1
     {
         static void Main()
         {
-            Matrix matrix = new Matrix();
+            #region TransportationProblem
+            /*Matrix matrix = new Matrix();
             matrix.Restrictions = 4;
             matrix.Variables = 5;
             matrix.CMatrix = new double[matrix.Restrictions][];
@@ -70,7 +71,57 @@ namespace ConsoleApp1
             }
 
             Console.WriteLine(matrix.CMatrix.Length);
-            Console.WriteLine(matrix.CMatrix[0].Length);
+            Console.WriteLine(matrix.CMatrix[0].Length);*/
+            #endregion
+
+            #region AssignmentProblem
+
+            Matrix matrix = new Matrix();
+
+            matrix.Restrictions = 5;
+            matrix.Variables = 5;
+
+            matrix.CMatrix = new double[matrix.Restrictions][];
+
+            for (int i = 0; i < matrix.Restrictions; i++)
+            {
+                matrix.CMatrix[i] = new double[matrix.Variables];
+            }
+
+            matrix.CMatrix[0][0] = 2;
+            matrix.CMatrix[0][1] = 4;
+            matrix.CMatrix[0][2] = 1;
+            matrix.CMatrix[0][3] = 3;
+            matrix.CMatrix[0][4] = 3;
+
+            matrix.CMatrix[1][0] = 1;
+            matrix.CMatrix[1][1] = 5;
+            matrix.CMatrix[1][2] = 4;
+            matrix.CMatrix[1][3] = 1;
+            matrix.CMatrix[1][4] = 2;
+
+            matrix.CMatrix[2][0] = 3;
+            matrix.CMatrix[2][1] = 5;
+            matrix.CMatrix[2][2] = 2;
+            matrix.CMatrix[2][3] = 2;
+            matrix.CMatrix[2][4] = 4;
+
+            matrix.CMatrix[3][0] = 1;
+            matrix.CMatrix[3][1] = 4;
+            matrix.CMatrix[3][2] = 3;
+            matrix.CMatrix[3][3] = 1;
+            matrix.CMatrix[3][4] = 4;
+
+            matrix.CMatrix[4][0] = 3;
+            matrix.CMatrix[4][1] = 2;
+            matrix.CMatrix[4][2] = 5;
+            matrix.CMatrix[4][3] = 3;
+            matrix.CMatrix[4][4] = 5;
+
+            matrix.Print(matrix.HungarianMethod());
+
+            Console.WriteLine(matrix.GetTotal());
+            #endregion
         }
     }
 }
