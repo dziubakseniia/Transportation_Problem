@@ -118,9 +118,14 @@ namespace ConsoleApp1
             matrix.CMatrix[4][3] = 3;
             matrix.CMatrix[4][4] = 5;
 
-            matrix.Print(matrix.HungarianMethod());
+            //Console.WriteLine(matrix.MinHungarianMethod());
 
-            Console.WriteLine(matrix.GetTotal());
+            //matrix.Print(matrix.CMatrix);
+            Console.WriteLine(new string('-', 50));
+
+            Console.WriteLine(matrix.MaxHungarianMethod());
+            matrix.Print(matrix.CMatrix);
+
             #endregion
         }
     }

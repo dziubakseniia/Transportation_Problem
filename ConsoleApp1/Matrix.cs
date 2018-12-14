@@ -469,9 +469,16 @@ namespace ConsoleApp1
 
         #region AssignmentProblem
 
-        public double[][] HungarianMethod()
+        public double MinHungarianMethod()
         {
+            double[][] tArray = new double[Restrictions][];
+            for (int i = 0; i < Restrictions; i++)
+            {
+                tArray[i] = new double[Variables];
+            }
+
             CreateTempMatrix(this);
+            CopyCMatrixToTArray(tArray, this);
             rows = new int[Restrictions];
             occupiedCols = new double[Restrictions];
 
@@ -486,7 +493,75 @@ namespace ConsoleApp1
             }
 
             IsOptimal();
-            return TempMatrix;
+            Create1_sTempMatrix();
+
+            return Sum(tArray);
+        }
+
+        public double MaxHungarianMethod()
+        {
+            double[][] tArray = new double[Restrictions][];
+            for (int i = 0; i < Restrictions; i++)
+            {
+                tArray[i] = new double[Variables];
+            }
+
+            CreateTempMatrix(this);
+            CopyCMatrixToTArray(tArray, this);
+            rows = new int[Restrictions];
+            occupiedCols = new double[Restrictions];
+
+            TempMatrix = SubtractMaxFromRow();
+            TempMatrix = SubtractMinFromCol();
+
+            CrossZeros();
+            while (numLines < Restrictions)
+            {
+                createAdditionalZeros();
+                CrossZeros();
+            }
+
+            IsOptimal();
+            Create1_sTempMatrix();
+
+            return Sum(tArray);
+        }
+
+        private void Create1_sTempMatrix()
+        {
+            for (int i = 0; i < Restrictions; i++)
+            {
+                for (int j = 0; j < Variables; j++)
+                {
+                    TempMatrix[i][j] = 0;
+                }
+            }
+            foreach (var index in indexes)
+            {
+                TempMatrix[index.Item1][index.Item2] = 1;
+            }
+        }
+
+        private double[][] SubtractMaxFromRow()
+        {
+            List<double> maxList = FindMaxInRow();
+            for (int i = 0; i < Restrictions; i++)
+            {
+                for (int j = 0; j < Variables; j++)
+                {
+                    CMatrix[i][j] *= -1;
+                }
+            }
+
+            for (int i = 0; i < Restrictions; i++)
+            {
+                for (int j = 0; j < Variables; j++)
+                {
+                    CMatrix[i][j] -= maxList[i];
+                }
+            }
+
+            return CMatrix;
         }
 
         private double[][] SubtractMinFromRow()
@@ -496,7 +571,7 @@ namespace ConsoleApp1
             {
                 for (int j = 0; j < Variables; j++)
                 {
-                    TempMatrix[i][j] -= minList[i];
+                    CMatrix[i][j] -= minList[i];
                 }
             }
 
@@ -515,6 +590,25 @@ namespace ConsoleApp1
             }
 
             return CMatrix;
+        }
+
+        private List<double> FindMaxInRow()
+        {
+            List<double> maxList = new List<double>();
+            for (int i = 0; i < Restrictions; i++)
+            {
+                var max = CMatrix[i][0];
+                for (int j = 0; j < Variables; j++)
+                {
+                    if (CMatrix[i][j] > max)
+                    {
+                        max = CMatrix[i][j];
+                    }
+                }
+                maxList.Add(max);
+            }
+
+            return maxList;
         }
 
         private List<double> FindMinInRow()
@@ -558,7 +652,7 @@ namespace ConsoleApp1
         private void CrossZeros()
         {
             numLines = 0;
-            Lines= new double[Restrictions][];
+            Lines = new double[Restrictions][];
             for (int i = 0; i < Restrictions; i++)
             {
                 Lines[i] = new double[Variables];
@@ -571,15 +665,8 @@ namespace ConsoleApp1
                     if (TempMatrix[i][j] == 0)
                     {
                         crossedNeighbours(i, j, MaxVerticalHorizontal(i, j));
-                        indexes.Add(new Tuple<int, int>(i, j));
                     }
                 }
-            }
-
-            Console.WriteLine("Indexes:");
-            foreach (var index in indexes)
-            {
-                Console.WriteLine(index.Item1 + " " + index.Item2);
             }
         }
 
@@ -588,7 +675,7 @@ namespace ConsoleApp1
             int result = 0;
             for (int i = 0; i < Restrictions; i++)
             {
-                if(TempMatrix[i][col] == 0)
+                if (TempMatrix[i][col] == 0)
                 {
                     result++;
                 }
@@ -604,6 +691,7 @@ namespace ConsoleApp1
 
         private void crossedNeighbours(int row, int col, int maxVerticalHorizontal)
         {
+            indexes.Clear();
             if (Lines[row][col] == 2)
             {
                 return;
@@ -678,12 +766,14 @@ namespace ConsoleApp1
                 {
                     rows[row] = col;
                     occupiedCols[col] = 1;
+                    indexes.Add(new Tuple<int, int>(row, col));
                     if (IsOptimal(row + 1))
                     {
                         return true;
                     }
 
                     occupiedCols[col] = 0;
+                    indexes.Remove(new Tuple<int, int>(row, col));
                 }
             }
 
@@ -695,17 +785,6 @@ namespace ConsoleApp1
             return IsOptimal(0);
         }
 
-        public double GetTotal()
-        {
-            double total = 0;
-            for (int i = 0; i < Restrictions; i++)
-            {
-                total += CMatrix[i][rows[i]];
-            }
-
-            return total;
-        }
-
         public void CreateTempMatrix(Matrix matrix)
         {
             TempMatrix = new double[matrix.Restrictions][];
@@ -714,6 +793,34 @@ namespace ConsoleApp1
             {
                 matrix.TempMatrix[i] = new double[matrix.Variables];
             }
+        }
+
+        public void CopyCMatrixToTArray(double[][] tArray, Matrix matrix)
+        {
+            for (int i = 0; i < matrix.Restrictions; i++)
+            {
+                for (int j = 0; j < matrix.Variables; j++)
+                {
+                    tArray[i][j] = matrix.CMatrix[i][j];
+                }
+            }
+        }
+
+        public double Sum(double[][] tArray)
+        {
+            double sum = 0;
+            for (int i = 0; i < Restrictions; i++)
+            {
+                for (int j = 0; j < Variables; j++)
+                {
+                    if (TempMatrix[i][j] == 1)
+                    {
+                        sum += tArray[i][j];
+                    }
+                }
+            }
+
+            return sum;
         }
 
         #endregion
