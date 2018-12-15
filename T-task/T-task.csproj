@@ -150,10 +150,13 @@
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\LowCostController.cs" />
+    <Compile Include="Controllers\MaxHungarianController.cs" />
+    <Compile Include="Controllers\MinHungarianController.cs" />
     <Compile Include="Controllers\Start\StartController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Hungarian.cs" />
     <Compile Include="Models\Matrix.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -168,6 +171,12 @@
     <Content Include="Views\LowCost\VarsRestr.cshtml" />
     <Content Include="Views\LowCost\LowCost.cshtml" />
     <Content Include="Views\LowCost\LowCostResult.cshtml" />
+    <Content Include="Views\MinHungarian\VarsRestr.cshtml" />
+    <Content Include="Views\MinHungarian\MinHungarian.cshtml" />
+    <Content Include="Views\MinHungarian\MinHungarianResult.cshtml" />
+    <Content Include="Views\MaxHungarian\VarsRestr.cshtml" />
+    <Content Include="Views\MaxHungarian\MaxHungarian.cshtml" />
+    <Content Include="Views\MaxHungarian\MaxHungarianResult.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

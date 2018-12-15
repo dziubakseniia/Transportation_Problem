@@ -88,43 +88,43 @@ namespace ConsoleApp1
                 matrix.CMatrix[i] = new double[matrix.Variables];
             }
 
-            matrix.CMatrix[0][0] = 2;
+            matrix.CMatrix[0][0] = 7;
             matrix.CMatrix[0][1] = 4;
-            matrix.CMatrix[0][2] = 1;
-            matrix.CMatrix[0][3] = 3;
-            matrix.CMatrix[0][4] = 3;
+            matrix.CMatrix[0][2] = 8;
+            matrix.CMatrix[0][3] = 7;
+            matrix.CMatrix[0][4] = 4;
 
-            matrix.CMatrix[1][0] = 1;
-            matrix.CMatrix[1][1] = 5;
-            matrix.CMatrix[1][2] = 4;
-            matrix.CMatrix[1][3] = 1;
-            matrix.CMatrix[1][4] = 2;
+            matrix.CMatrix[1][0] = 10;
+            matrix.CMatrix[1][1] = 8;
+            matrix.CMatrix[1][2] = 6;
+            matrix.CMatrix[1][3] = 10;
+            matrix.CMatrix[1][4] = 9;
 
-            matrix.CMatrix[2][0] = 3;
-            matrix.CMatrix[2][1] = 5;
-            matrix.CMatrix[2][2] = 2;
-            matrix.CMatrix[2][3] = 2;
-            matrix.CMatrix[2][4] = 4;
+            matrix.CMatrix[2][0] = 5;
+            matrix.CMatrix[2][1] = 6;
+            matrix.CMatrix[2][2] = 7;
+            matrix.CMatrix[2][3] = 5;
+            matrix.CMatrix[2][4] = 10;
 
-            matrix.CMatrix[3][0] = 1;
-            matrix.CMatrix[3][1] = 4;
-            matrix.CMatrix[3][2] = 3;
-            matrix.CMatrix[3][3] = 1;
-            matrix.CMatrix[3][4] = 4;
+            matrix.CMatrix[3][0] = 9;
+            matrix.CMatrix[3][1] = 9;
+            matrix.CMatrix[3][2] = 10;
+            matrix.CMatrix[3][3] = 9;
+            matrix.CMatrix[3][4] = 8;
 
-            matrix.CMatrix[4][0] = 3;
-            matrix.CMatrix[4][1] = 2;
-            matrix.CMatrix[4][2] = 5;
-            matrix.CMatrix[4][3] = 3;
-            matrix.CMatrix[4][4] = 5;
+            matrix.CMatrix[4][0] = 8;
+            matrix.CMatrix[4][1] = 10;
+            matrix.CMatrix[4][2] = 9;
+            matrix.CMatrix[4][3] = 8;
+            matrix.CMatrix[4][4] = 7;
 
-            //Console.WriteLine(matrix.MinHungarianMethod());
+            Console.WriteLine(matrix.MinHungarianMethod());
 
-            //matrix.Print(matrix.CMatrix);
+            matrix.Print(matrix.CMatrix);
             Console.WriteLine(new string('-', 50));
 
-            Console.WriteLine(matrix.MaxHungarianMethod());
-            matrix.Print(matrix.CMatrix);
+            //Console.WriteLine(matrix.MaxHungarianMethod());
+            //matrix.Print(matrix.CMatrix);
 
             #endregion
         }

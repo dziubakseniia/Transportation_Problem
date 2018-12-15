@@ -1,0 +1,463 @@
+﻿@model T_task.Models.Hungarian
+
+@{
+    /**/
+
+    ViewBag.Title = "Min Hungarian Method";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm())
+{
+    <div class="border-bottom">
+        <h3>Розподілити роботи між програмістами, щоб загальна кількість людино-днів, витрачена на виконання всіх замовлень, була мінімальною:</h3>
+    </div>
+    <p>Оцінка часу, необхідна програмістам для виконання кожної з робіт:</p>
+    <div class="ml-1 pb-3 border-bottom">
+        @for (int i = 0; i < Model.Restrictions; i++)
+        {
+            for (int j = 0; j < Model.Variables; j++)
+            {
+                if (i == 0 && j == 0)
+                {
+                    <p>Бойко</p>
+                    <div class="input-group mt-2 col-4">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Блог:</span>
+                        </div>
+                        @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Блог", @class = "form-control" })
+                        <div class="input-group-append">
+                            <span class="input-group-text">днів</span>
+                        </div>
+                    </div>
+                }
+                if (i == 0 && j == 1)
+                {
+                    <div class="input-group mt-2 col-4">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Словник:</span>
+                        </div>
+                        @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Словник", @class = "form-control" })
+                        <div class="input-group-append">
+                            <span class="input-group-text">днів</span>
+                        </div>
+                    </div>
+                }
+                if (i == 0 && j == 2)
+                {
+                    <div class="input-group mt-2 col-4">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Карти:</span>
+                        </div>
+                        @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Карти", @class = "form-control" })
+                        <div class="input-group-append">
+                            <span class="input-group-text">днів</span>
+                        </div>
+                    </div>
+                }
+                if (i == 0 && j == 3)
+                {
+                    <div class="input-group mt-2 col-4">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Мессенжер:</span>
+                        </div>
+                        @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Мессенжер", @class = "form-control" })
+                        <div class="input-group-append">
+                            <span class="input-group-text">днів</span>
+                        </div>
+                    </div>
+                }
+                if (i == 0 && j == 4)
+                {
+                    <div class="input-group mt-2 col-4">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Квитки:</span>
+                        </div>
+                        @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Квитки", @class = "form-control" })
+                        <div class="input-group-append">
+                            <span class="input-group-text">днів</span>
+                        </div>
+                    </div>
+                }
+                if (i == 0 && j >= 5)
+                {
+                    <div class="input-group mt-2 col-4">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Програма @(j + 1):</span>
+                        </div>
+                        @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Програма" + (i + 1), @class = "form-control" })
+                        <div class="input-group-append">
+                            <span class="input-group-text">днів</span>
+                        </div>
+                    </div>
+                }
+                if (i == 1 && j == 0)
+                {
+                    <p class="mt-2">Іваненко</p>
+                    <div class="input-group mt-2 col-4">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Блог:</span>
+                        </div>
+                        @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Блог", @class = "form-control" })
+                        <div class="input-group-append">
+                            <span class="input-group-text">днів</span>
+                        </div>
+                    </div>
+                }
+                if (i == 1 && j == 1)
+                {
+                    <div class="input-group mt-2 col-4">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Словник:</span>
+                        </div>
+                        @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Словник", @class = "form-control" })
+                        <div class="input-group-append">
+                            <span class="input-group-text">днів</span>
+                        </div>
+                    </div>
+                }
+                if (i == 1 && j == 2)
+                {
+                    <div class="input-group mt-2 col-4">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Карти:</span>
+                        </div>
+                        @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Карти", @class = "form-control" })
+                        <div class="input-group-append">
+                            <span class="input-group-text">днів</span>
+                        </div>
+                    </div>
+                }
+                if (i == 1 && j == 3)
+                {
+                    <div class="input-group mt-2 col-4">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Мессенжер:</span>
+                        </div>
+                        @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Мессенжер", @class = "form-control" })
+                        <div class="input-group-append">
+                            <span class="input-group-text">днів</span>
+                        </div>
+                    </div>
+                }
+                if (i == 1 && j == 4)
+                {
+                    <div class="input-group mt-2 col-4">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Квитки:</span>
+                        </div>
+                        @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Квитки", @class = "form-control" })
+                        <div class="input-group-append">
+                            <span class="input-group-text">днів</span>
+                        </div>
+                    </div>
+                }
+                if (i == 1 && j >= 5)
+                {
+                    <div class="input-group mt-2 col-4">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Програма @(j + 1):</span>
+                        </div>
+                        @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Програма" + (i + 1), @class = "form-control" })
+                        <div class="input-group-append">
+                            <span class="input-group-text">днів</span>
+                        </div>
+                    </div>
+                }
+                if (i == 2 && j == 0)
+                {
+                    <p class="mt-2">Чупрей</p>
+                    <div class="input-group mt-2 col-4">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Блог:</span>
+                        </div>
+                        @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Блог", @class = "form-control" })
+                        <div class="input-group-append">
+                            <span class="input-group-text">днів</span>
+                        </div>
+                    </div>
+                }
+                if (i == 2 && j == 1)
+                {
+                    <div class="input-group mt-2 col-4">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Словник:</span>
+                        </div>
+                        @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Словник", @class = "form-control" })
+                        <div class="input-group-append">
+                            <span class="input-group-text">днів</span>
+                        </div>
+                    </div>
+                }
+                if (i == 2 && j == 2)
+                {
+                    <div class="input-group mt-2 col-4">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Карти:</span>
+                        </div>
+                        @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Карти", @class = "form-control" })
+                        <div class="input-group-append">
+                            <span class="input-group-text">днів</span>
+                        </div>
+                    </div>
+                }
+                if (i == 2 && j == 3)
+                {
+                    <div class="input-group mt-2 col-4">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Мессенжер:</span>
+                        </div>
+                        @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Мессенжер", @class = "form-control" })
+                        <div class="input-group-append">
+                            <span class="input-group-text">днів</span>
+                        </div>
+                    </div>
+                }
+                if (i == 2 && j == 4)
+                {
+                    <div class="input-group mt-2 col-4">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Квитки:</span>
+                        </div>
+                        @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Квитки", @class = "form-control" })
+                        <div class="input-group-append">
+                            <span class="input-group-text">днів</span>
+                        </div>
+                    </div>
+                }
+                if (i == 2 && j >= 5)
+                {
+                    <div class="input-group mt-2 col-4">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Програма @(j + 1):</span>
+                        </div>
+                        @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Програма" + (i + 1), @class = "form-control" })
+                        <div class="input-group-append">
+                            <span class="input-group-text">днів</span>
+                        </div>
+                    </div>
+                }
+                if (i == 3 && j == 0)
+                {
+                    <p class="mt-2">Петрів</p>
+                    <div class="input-group mt-2 col-4">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Блог:</span>
+                        </div>
+                        @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Блог", @class = "form-control" })
+                        <div class="input-group-append">
+                            <span class="input-group-text">днів</span>
+                        </div>
+                    </div>
+                }
+                if (i == 3 && j == 1)
+                {
+                    <div class="input-group mt-2 col-4">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Словник:</span>
+                        </div>
+                        @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Словник", @class = "form-control" })
+                        <div class="input-group-append">
+                            <span class="input-group-text">днів</span>
+                        </div>
+                    </div>
+                }
+                if (i == 3 && j == 2)
+                {
+                    <div class="input-group mt-2 col-4">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Карти:</span>
+                        </div>
+                        @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Карти", @class = "form-control" })
+                        <div class="input-group-append">
+                            <span class="input-group-text">днів</span>
+                        </div>
+                    </div>
+                }
+                if (i == 3 && j == 3)
+                {
+                    <div class="input-group mt-2 col-4">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Мессенжер:</span>
+                        </div>
+                        @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Мессенжер", @class = "form-control" })
+                        <div class="input-group-append">
+                            <span class="input-group-text">днів</span>
+                        </div>
+                    </div>
+                }
+                if (i == 3 && j == 4)
+                {
+                    <div class="input-group mt-2 col-4">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Квитки:</span>
+                        </div>
+                        @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Квитки", @class = "form-control" })
+                        <div class="input-group-append">
+                            <span class="input-group-text">днів</span>
+                        </div>
+                    </div>
+                }
+                if (i == 3 && j >= 5)
+                {
+                    <div class="input-group mt-2 col-4">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Програма @(j + 1):</span>
+                        </div>
+                        @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Програма" + (i + 1), @class = "form-control" })
+                        <div class="input-group-append">
+                            <span class="input-group-text">днів</span>
+                        </div>
+                    </div>
+                }
+                if (i == 4 && j == 0)
+                {
+                    <p class="mt-2">Соколовський</p>
+                    <div class="input-group mt-2 col-4">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Блог:</span>
+                        </div>
+                        @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Блог", @class = "form-control" })
+                        <div class="input-group-append">
+                            <span class="input-group-text">днів</span>
+                        </div>
+                    </div>
+                }
+                if (i == 4 && j == 1)
+                {
+                    <div class="input-group mt-2 col-4">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Словник:</span>
+                        </div>
+                        @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Словник", @class = "form-control" })
+                        <div class="input-group-append">
+                            <span class="input-group-text">днів</span>
+                        </div>
+                    </div>
+                }
+                if (i == 4 && j == 2)
+                {
+                    <div class="input-group mt-2 col-4">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Карти:</span>
+                        </div>
+                        @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Карти", @class = "form-control" })
+                        <div class="input-group-append">
+                            <span class="input-group-text">днів</span>
+                        </div>
+                    </div>
+                }
+                if (i == 4 && j == 3)
+                {
+                    <div class="input-group mt-2 col-4">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Мессенжер:</span>
+                        </div>
+                        @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Мессенжер", @class = "form-control" })
+                        <div class="input-group-append">
+                            <span class="input-group-text">днів</span>
+                        </div>
+                    </div>
+                }
+                if (i == 4 && j == 4)
+                {
+                    <div class="input-group mt-2 col-4">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Квитки:</span>
+                        </div>
+                        @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Квитки", @class = "form-control" })
+                        <div class="input-group-append">
+                            <span class="input-group-text">днів</span>
+                        </div>
+                    </div>
+                }
+                if (i == 4 && j >= 5)
+                {
+                    <div class="input-group mt-2 col-4">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Програма @(j + 1):</span>
+                        </div>
+                        @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Програма" + (i + 1), @class = "form-control" })
+                        <div class="input-group-append">
+                            <span class="input-group-text">днів</span>
+                        </div>
+                    </div>
+                }
+                if (i == 5 && j == 0)
+                {
+                    <p class="mt-2">Програміст @(i+1)</p>
+                    <div class="input-group mt-2 col-4">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Блог:</span>
+                        </div>
+                        @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Блог", @class = "form-control" })
+                        <div class="input-group-append">
+                            <span class="input-group-text">днів</span>
+                        </div>
+                    </div>
+                }
+                if (i == 5 && j == 1)
+                {
+                    <div class="input-group mt-2 col-4">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Словник:</span>
+                        </div>
+                        @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Словник", @class = "form-control" })
+                        <div class="input-group-append">
+                            <span class="input-group-text">днів</span>
+                        </div>
+                    </div>
+                }
+                if (i == 5 && j == 2)
+                {
+                    <div class="input-group mt-2 col-4">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Карти:</span>
+                        </div>
+                        @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Карти", @class = "form-control" })
+                        <div class="input-group-append">
+                            <span class="input-group-text">днів</span>
+                        </div>
+                    </div>
+                }
+                if (i == 5 && j == 3)
+                {
+                    <div class="input-group mt-2 col-4">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Мессенжер:</span>
+                        </div>
+                        @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Мессенжер", @class = "form-control" })
+                        <div class="input-group-append">
+                            <span class="input-group-text">днів</span>
+                        </div>
+                    </div>
+                }
+                if (i == 5 && j == 4)
+                {
+                    <div class="input-group mt-2 col-4">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Квитки:</span>
+                        </div>
+                        @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Квитки", @class = "form-control" })
+                        <div class="input-group-append">
+                            <span class="input-group-text">днів</span>
+                        </div>
+                    </div>
+                }
+                if (i == 5 && j >= 5)
+                {
+                    <div class="input-group mt-2 col-4">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Програма @(j + 1):</span>
+                        </div>
+                        @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Програма" + (i + 1), @class = "form-control" })
+                        <div class="input-group-append">
+                            <span class="input-group-text">днів</span>
+                        </div>
+                    </div>
+                }
+            }
+        }
+    </div>
+    <div class="mx-auto col-9"><input type="submit" value="Розрахувати" class="btn btn-success mt-2" /></div>
+}

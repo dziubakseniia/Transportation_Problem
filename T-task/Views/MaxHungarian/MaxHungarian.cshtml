@@ -1,0 +1,327 @@
+﻿@model T_task.Models.Hungarian
+
+@{
+    ViewBag.Title = "Max Hungarian Method";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm())
+{
+    <div class="border-bottom"><h3>Розрахувати максимальний прибуток від транспортування стекол <br />з міст-склофабрик до будівельних компаній:</h3></div>
+
+    <p class="mt-2">Вартість транспортування 1000 стекол:</p>
+    <div class="ml-4 pb-3 border-bottom">
+        @for (int i = 0; i < Model.Restrictions; i++)
+        {
+            for (int j = 0; j < Model.Variables; j++)
+            {
+                if (i == 0 && j == 0)
+                {
+                    <p>Київ</p>
+                    <div class="input-group col-5">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Житлобуд-1:</span>
+                        </div>
+                        @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Житлобуд-1", @class = "form-control" })
+                        <div class="input-group-append">
+                            <span class="input-group-text">тис. грн</span>
+                        </div>
+                    </div>
+                }
+                if (i == 0 && j == 1)
+                {
+                    <div class="input-group col-5">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Житлобуд-2:</span>
+                        </div>
+                        @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Житлобуд-2", @class = "form-control" })
+                        <div class="input-group-append">
+                            <span class="input-group-text">тис. грн</span>
+                        </div>
+                    </div>
+                }
+                if (i == 0 && j == 2)
+                {
+                    <div class="input-group col-5">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Петрівський квартал:</span>
+                        </div>
+                        @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Петрівський квартал", @class = "form-control" })
+                        <div class="input-group-append">
+                            <span class="input-group-text">тис. грн</span>
+                        </div>
+                    </div>
+                }
+                if (i == 0 && j == 3)
+                {
+                    <div class="input-group col-5">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Інтерхол Буд:</span>
+                        </div>
+                        @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Інтерхол Буд", @class = "form-control" })
+                        <div class="input-group-append">
+                            <span class="input-group-text">тис. грн</span>
+                        </div>
+                    </div>
+                }
+                if (i == 0 && j >= 4)
+                {
+                    <div class="input-group col-5">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Компанія @(j + 1):</span>
+                        </div>
+                        @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Компанія" + @i + 1, @class = "form-control" })
+                        <div class="input-group-append">
+                            <span class="input-group-text">тис. грн</span>
+                        </div>
+                    </div>
+                }
+                if (i == 1 && j == 0)
+                {
+                    <p class="mt-2">Харків</p>
+                    <div class="input-group col-5">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Житлобуд-1:</span>
+                        </div>
+                        @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Житлобуд-1", @class = "form-control" })
+                        <div class="input-group-append">
+                            <span class="input-group-text">тис. грн</span>
+                        </div>
+                    </div>
+                }
+                if (i == 1 && j == 1)
+                {
+                    <div class="input-group col-5">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Житлобуд-2:</span>
+                        </div>
+                        @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Житлобуд-2", @class = "form-control" })
+                        <div class="input-group-append">
+                            <span class="input-group-text">тис. грн</span>
+                        </div>
+                    </div>
+                }
+                if (i == 1 && j == 2)
+                {
+                    <div class="input-group col-5">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Петрівський квартал:</span>
+                        </div>
+                        @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Петрівський квартал", @class = "form-control" })
+                        <div class="input-group-append">
+                            <span class="input-group-text">тис. грн</span>
+                        </div>
+                    </div>
+                }
+                if (i == 1 && j == 3)
+                {
+                    <div class="input-group col-5">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Інтерхол Буд:</span>
+                        </div>
+                        @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Інтерхол Буд", @class = "form-control" })
+                        <div class="input-group-append">
+                            <span class="input-group-text">тис. грн</span>
+                        </div>
+                    </div>
+                }
+                if (i == 1 && j >= 4)
+                {
+                    <div class="input-group col-5">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Компанія @(j + 1):</span>
+                        </div>
+                        @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Компанія" + @i + 1, @class = "form-control" })
+                        <div class="input-group-append">
+                            <span class="input-group-text">тис. грн</span>
+                        </div>
+                    </div>
+                }
+                if (i == 2 && j == 0)
+                {
+                    <p class="mt-2">Львів</p>
+                    <div class="input-group col-5">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Житлобуд-1:</span>
+                        </div>
+                        @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Житлобуд-1", @class = "form-control" })
+                        <div class="input-group-append">
+                            <span class="input-group-text">тис. грн</span>
+                        </div>
+                    </div>
+                }
+                if (i == 2 && j == 1)
+                {
+                    <div class="input-group col-5">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Житлобуд-2:</span>
+                        </div>
+                        @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Житлобуд-2", @class = "form-control" })
+                        <div class="input-group-append">
+                            <span class="input-group-text">тис. грн</span>
+                        </div>
+                    </div>
+                }
+                if (i == 2 && j == 2)
+                {
+                    <div class="input-group col-5">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Петрівський квартал:</span>
+                        </div>
+                        @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Петрівський квартал", @class = "form-control" })
+                        <div class="input-group-append">
+                            <span class="input-group-text">тис. стекол</span>
+                        </div>
+                    </div>
+                }
+                if (i == 2 && j == 3)
+                {
+                    <div class="input-group col-5">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Інтерхол Буд:</span>
+                        </div>
+                        @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Інтерхол Буд", @class = "form-control" })
+                        <div class="input-group-append">
+                            <span class="input-group-text">тис. грн</span>
+                        </div>
+                    </div>
+                }
+                if (i == 2 && j >= 4)
+                {
+                    <div class="input-group col-5">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Компанія @(j + 1):</span>
+                        </div>
+                        @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Компанія" + @i + 1, @class = "form-control" })
+                        <div class="input-group-append">
+                            <span class="input-group-text">тис. грн</span>
+                        </div>
+                    </div>
+                }
+                if (i == 3 && j == 0)
+                {
+                    <p class="mt-2">Одеса</p>
+                    <div class="input-group col-5">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Житлобуд-1:</span>
+                        </div>
+                        @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Житлобуд-1", @class = "form-control" })
+                        <div class="input-group-append">
+                            <span class="input-group-text">тис. грн</span>
+                        </div>
+                    </div>
+                }
+                if (i == 3 && j == 1)
+                {
+                    <div class="input-group col-5">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Житлобуд-2:</span>
+                        </div>
+                        @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Житлобуд-2", @class = "form-control" })
+                        <div class="input-group-append">
+                            <span class="input-group-text">тис. грн</span>
+                        </div>
+                    </div>
+                }
+                if (i == 3 && j == 2)
+                {
+                    <div class="input-group col-5">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Петрівський квартал:</span>
+                        </div>
+                        @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Петрівський квартал", @class = "form-control" })
+                        <div class="input-group-append">
+                            <span class="input-group-text">тис. стекол</span>
+                        </div>
+                    </div>
+                }
+                if (i == 3 && j == 3)
+                {
+                    <div class="input-group col-5">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Інтерхол Буд:</span>
+                        </div>
+                        @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Інтерхол Буд", @class = "form-control" })
+                        <div class="input-group-append">
+                            <span class="input-group-text">тис. грн</span>
+                        </div>
+                    </div>
+                }
+                if (i == 3 && j >= 4)
+                {
+                    <div class="input-group col-5">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Компанія @(j + 1):</span>
+                        </div>
+                        @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Компанія" + @i + 1, @class = "form-control" })
+                        <div class="input-group-append">
+                            <span class="input-group-text">тис. грн</span>
+                        </div>
+                    </div>
+                }
+                if (i >= 4 && j == 0)
+                {
+                    <p class="mt-2">Місто @(i + 1)</p>
+                    <div class="input-group col-5">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Житлобуд-1:</span>
+                        </div>
+                        @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Житлобуд-1", @class = "form-control" })
+                        <div class="input-group-append">
+                            <span class="input-group-text">тис. грн</span>
+                        </div>
+                    </div>
+                }
+                if (i >= 4 && j == 1)
+                {
+                    <div class="input-group col-5">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Житлобуд-2:</span>
+                        </div>
+                        @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Житлобуд-2", @class = "form-control" })
+                        <div class="input-group-append">
+                            <span class="input-group-text">тис. грн</span>
+                        </div>
+                    </div>
+                }
+                if (i >= 4 && j == 2)
+                {
+                    <div class="input-group col-5">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Петрівський квартал:</span>
+                        </div>
+                        @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Петрівський квартал", @class = "form-control" })
+                        <div class="input-group-append">
+                            <span class="input-group-text">тис. грн</span>
+                        </div>
+                    </div>
+                }
+                if (i >= 4 && j == 3)
+                {
+                    <div class="input-group col-5">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Інтерхол Буд:</span>
+                        </div>
+                        @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Інтерхол Буд", @class = "form-control" })
+                        <div class="input-group-append">
+                            <span class="input-group-text">тис. грн</span>
+                        </div>
+                    </div>
+                }
+                if (i >= 4 && j >= 4)
+                {
+                    <div class="input-group col-5">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Компанія @(j + 1):</span>
+                        </div>
+                        @Html.TextBoxFor(x => Model.CMatrix[i][j], null, new { @placeholder = "Компанія" + @i + 1, @class = "form-control" })
+                        <div class="input-group-append">
+                            <span class="input-group-text">тис. грн</span>
+                        </div>
+                    </div>
+                }
+            }
+        }
+    </div>
+    <div class="mx-auto col-9"><input type="submit" value="Розрахувати" class="btn btn-success mt-2" /></div>
+}
